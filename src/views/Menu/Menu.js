@@ -8,6 +8,8 @@ import Home from "views/Home/Home.jsx";
 import Box from "views/Caixa/index.jsx";
 import Location from "views/Location/index.jsx";
 import User from "views/User/index.jsx";
+import Login from "views/Login/Login.jsx";
+
 
 const dashboardRoutes = [
   {
@@ -36,6 +38,13 @@ const dashboardRoutes = [
     name: "Usuários",
     icon: Person,
     component: User,
+    layout: "/admin"
+  },
+  {
+    path: "/login",
+    name: "Área de Login",
+    icon: Person,
+    component: Login,
     layout: "/admin"
   },
 ];

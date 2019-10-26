@@ -94,9 +94,9 @@ class Dashboard extends React.Component {
     const { classes, ...rest } = this.props;
     return (
       
-         
+      localStorage.getItem('tokenUser') ?  
         <div className={classes.wrapper}>
-            {<Redirect to='/admin/menu' />}
+            {/*<Redirect to='/admin/home' />*/}
             <Sidebar
               routes={menu}
               logoText={"Fluxo de caixas"}
@@ -124,9 +124,9 @@ class Dashboard extends React.Component {
             </div>
           
         </div>
-        /*: 
+        : 
         <div className={classes.wrapper}>
-          <Redirect to='/admin/menu' />
+          <Redirect to='/admin/login' />
           <div ref="mainPanel">
             {this.getRoute() ? (
               <div className={classes.content}>
@@ -138,7 +138,7 @@ class Dashboard extends React.Component {
             {this.getRoute() ? <Footer /> : null}
           </div>
           
-        </div> */
+        </div> 
     );
   }
 }
