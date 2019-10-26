@@ -94,8 +94,8 @@ class Login extends React.Component {
         usuario: this.state.usuario,
         senha: this.state.senha
       });
-      axios.defaults.headers.common["X-Access-Token"] = res.data.token;
-      localStorage.setItem("tokenUser", JSON.stringify(res.data));
+      //axios.defaults.headers.common["X-Access-Token"] = res.data.token;
+      localStorage.setItem("token", JSON.stringify(res.data.token));
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
