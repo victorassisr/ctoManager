@@ -6,7 +6,7 @@ const utils = {
     URL_BASE_API: 'http://localhost/api',
 
     showError: (err) => {
-        alert('Ocorreu um problema', `Mensagem: ${err}`)
+        alert(`Erro: ${err}`)
     }
 }
 

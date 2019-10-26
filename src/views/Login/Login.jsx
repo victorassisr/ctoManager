@@ -90,13 +90,22 @@ class Login extends React.Component {
   login = async event => {
     event.preventDefault();
     try {
-      const res = await axios.post(`${utils.URL_BASE_API}/auth`, {
-        usuario: this.state.usuario,
-        senha: this.state.senha
-      });
+      axios({
+        method: "post",
+        url: `${utils.URL_BASE_API}/auth`,
+        data: {
+          usuario: this.state.usuario,
+          senha: this.state.senha
+        }
+      })
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
       //axios.defaults.headers.common["X-Access-Token"] = res.data.token;
-      localStorage.setItem("token", JSON.stringify(res.data.token));
-      this.setRedirect();
     } catch (err) {
       utils.showError(err);
     }
@@ -125,7 +134,7 @@ class Login extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "email",
+                          name: "usuario",
                           onChange: this.onChange,
                           required: true
                         }}
@@ -140,7 +149,7 @@ class Login extends React.Component {
                         }}
                         inputProps={{
                           type: "password",
-                          name: "password",
+                          name: "senha",
                           onChange: this.onChange,
                           required: true
                         }}
