@@ -90,7 +90,7 @@ class Login extends React.Component {
   login = async event => {
     event.preventDefault();
     try {
-      const res = await axios.post(`${utils.server}/auth`, {
+      const res = await axios.post(`${utils.URL_BASE_API}/auth`, {
         usuario: this.state.usuario,
         senha: this.state.senha
       });
