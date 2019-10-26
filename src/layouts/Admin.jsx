@@ -94,7 +94,7 @@ class Dashboard extends React.Component {
     const { classes, ...rest } = this.props;
     return (
       
-      localStorage.getItem('tokenUser') ?  
+      localStorage.getItem('tokenUser') ? //retirar esta linha para testes sem o banco 
         <div className={classes.wrapper}>
             {/*<Redirect to='/admin/home' />*/}
             <Sidebar
