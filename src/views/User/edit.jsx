@@ -1,8 +1,8 @@
 import React from "react";
 
-import axios from "axios"
-import { Redirect } from 'react-router-dom'
-import { server, showError } from '../../common'
+import axios from "axios";
+import { Redirect } from "react-router-dom";
+import { utils } from "../../common";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -15,14 +15,14 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-import classNames from 'classnames';
-import Select from 'react-select';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
+import classNames from "classnames";
+import Select from "react-select";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import Chip from "@material-ui/core/Chip";
+import MenuItem from "@material-ui/core/MenuItem";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const styles = {
   cardCategoryWhite: {
@@ -42,33 +42,33 @@ const styles = {
     textDecoration: "none"
   },
   divAutocomplete: {
-    paddingTop: 30,
+    paddingTop: 30
   },
   input: {
-    display: 'flex',
-    padding: 0,
+    display: "flex",
+    padding: 0
   },
   valueContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
     flex: 1,
-    alignItems: 'center',
-    overflow: 'hidden',
+    alignItems: "center",
+    overflow: "hidden"
   },
   singleValue: {
-    fontSize: 16,
+    fontSize: 16
   },
   placeholder: {
-    position: 'absolute',
+    position: "absolute",
     left: 2,
-    fontSize: 16,
+    fontSize: 16
   },
   paper: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 1,
     left: 0,
-    right: 0,
-  },
+    right: 0
+  }
 };
 
 function NoOptionsMessage(props) {
@@ -97,8 +97,8 @@ function Control(props) {
           className: props.selectProps.classes.input,
           inputRef: props.innerRef,
           children: props.children,
-          ...props.innerProps,
-        },
+          ...props.innerProps
+        }
       }}
       {...props.selectProps.textFieldProps}
     />
@@ -112,7 +112,7 @@ function Option(props) {
       selected={props.isFocused}
       component="div"
       style={{
-        fontWeight: props.isSelected ? 500 : 400,
+        fontWeight: props.isSelected ? 500 : 400
       }}
       {...props.innerProps}
     >
@@ -135,7 +135,10 @@ function Placeholder(props) {
 
 function SingleValue(props) {
   return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+    <Typography
+      className={props.selectProps.classes.singleValue}
+      {...props.innerProps}
+    >
       {props.children}
     </Typography>
   );
@@ -147,7 +150,7 @@ function MultiValue(props) {
       tabIndex={-1}
       label={props.children}
       className={classNames(props.selectProps.classes.chip, {
-        [props.selectProps.classes.chipFocused]: props.isFocused,
+        [props.selectProps.classes.chipFocused]: props.isFocused
       })}
       onDelete={props.removeProps.onClick}
       deleteIcon={<CancelIcon {...props.removeProps} />}
@@ -157,208 +160,223 @@ function MultiValue(props) {
 
 function Menu(props) {
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+    <Paper
+      square
+      className={props.selectProps.classes.paper}
+      {...props.innerProps}
+    >
       {props.children}
     </Paper>
   );
 }
 
-
 class editUser extends React.Component {
-    
-    constructor(props){
-        super(props)
-        this.state = {
-          isLoading: false,
-          name: '',
-          email: '',
-          password: '',
-          description: '',
-          redirect: false,
-          typeUser: [],
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.edit = this.edit.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      name: "",
+      email: "",
+      password: "",
+      description: "",
+      redirect: false,
+      typeUser: []
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.edit = this.edit.bind(this);
+  }
 
-    setRedirect = () => {
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    });
+  };
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to="/admin/user" />;
+    }
+  };
+
+  handleChange = name => value => {
+    this.setState({
+      [name]: value
+    });
+  };
+
+  onChange = e =>
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+
+  edit = async event => {
+    event.preventDefault();
+
+    try {
+      await axios.put(`${utils.server}/user`, {
+        idUser: this.props.match.params.id,
+        idTypeUser:
+          typeof this.state.idTypeUser.value == "undefined"
+            ? this.state.idTypeUser
+            : this.state.idTypeUser.value,
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      });
+      this.setRedirect();
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  loadUser = async () => {
+    try {
+      const res = await axios.get(
+        `${utils.server}/user/${this.props.match.params.id}`
+      );
       this.setState({
-        redirect: true
+        name: res.data.name,
+        email: res.data.email,
+        description: res.data.description,
+        idTypeUser: res.data.idTypeUser,
+        isLoading: false
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  loadTypeUser = async () => {
+    try {
+      const resTypeUser = await axios.get(`${utils.server}/typeuser`);
+      this.setState({ typeUser: resTypeUser.data });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+    this.loadUser();
+    this.loadTypeUser();
+  }
+
+  render() {
+    const { classes } = this.props;
+
+    const components = {
+      Control,
+      Menu,
+      MultiValue,
+      NoOptionsMessage,
+      Option,
+      Placeholder,
+      SingleValue
+    };
+
+    const allTypeUser = this.state.typeUser
+      .map(typeUser => {
+        return { label: typeUser.description, value: typeUser.id };
       })
-    }
+      .map(typeUsers => ({
+        value: typeUsers.value,
+        label: typeUsers.label
+      }));
 
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to='/admin/user' />
-        }
-    }
-
-    handleChange = name => value => {
-      this.setState({
-        [name]: value,
-      })
-    }
-
-    onChange = e => this.setState({ 
-      [e.target.name]: e.target.value 
-    })
-    
-    edit = async event => {
-      event.preventDefault()
-        
-      try {
-        await axios.put(`${server}/user`, {
-          idUser: this.props.match.params.id,
-          idTypeUser: typeof this.state.idTypeUser.value == 'undefined' ? this.state.idTypeUser : this.state.idTypeUser.value,
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password,
-        })
-        this.setRedirect()
-      } catch (err) {
-          showError(err)
-      } 
-    }
-
-    loadUser = async () => {
-      try {
-        const res = await axios.get(`${server}/user/${this.props.match.params.id}`)
-        this.setState({ name: res.data.name, email: res.data.email, description: res.data.description,
-                        idTypeUser: res.data.idTypeUser, isLoading: false })
-      } catch (err) {
-          showError(err)
-      }
-    } 
-
-    loadTypeUser = async () => {
-      try {
-        const resTypeUser = await axios.get(`${server}/typeuser`)
-        this.setState({ typeUser: resTypeUser.data })
-      } catch (err) {
-          showError(err)
-      }
-    }
-
-    componentDidMount(){
-      this.setState({ isLoading: true})
-      this.loadUser()
-      this.loadTypeUser()
-    }
-
-    render(){
-      
-        const { classes } = this.props
-        
-        const components = {
-          Control,
-          Menu,
-          MultiValue,
-          NoOptionsMessage,
-          Option,
-          Placeholder,
-          SingleValue,
-        }
-
-        const allTypeUser = this.state.typeUser.map(typeUser => {
-          return ({'label': typeUser.description, 'value': typeUser.id })
-        }).map(typeUsers => ({
-          value: typeUsers.value,
-          label: typeUsers.label,
-        })) 
-        
-        return (
-            <div>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <Card>
-                    <CardHeader color="info">
-                      <h4 className={classes.cardTitleWhite}>Usuário</h4>
-                    </CardHeader>
-                    <form onSubmit={this.edit}>
-                      <CardBody>
-                      <GridContainer>
-                          <GridItem style={{marginTop: 22}} xs={12} sm={12} md={6}>
-                          {
-                            this.state.isLoading && <span>Carregando, aguarde..</span> 
-                          }{ !this.state.isLoading && 
-                            <Select
-                                classes={classes}
-                                options={allTypeUser}
-                                components={components}
-                                defaultValue={{ label: this.state.description,
-                                                value: this.state.idTypeUser }}
-                                required={true}
-                                onChange={this.handleChange('idTypeUser')}
-                                placeholder="Tipo do Usuário"
-                                isClearable
-                              />
-                          }
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                              labelText="Nome"
-                              id="name"
-                              formControlProps={{
-                                fullWidth: true
-                              }}
-                              inputProps={{
-                                name: "name",
-                                value: this.state.name,
-                                onChange: this.onChange,
-                                required: true
-                              }}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                          <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                              labelText="Email"
-                              id="email"
-                              formControlProps={{
-                                fullWidth: true
-                              }}
-                              inputProps={{
-                                type: 'email',
-                                name: "email",
-                                value: this.state.email,
-                                onChange: this.onChange,
-                                required: true
-                              }}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                              labelText="Senha"
-                              id="password"
-                              formControlProps={{
-                                fullWidth: true
-                              }}
-                              inputProps={{
-                                type: 'password',
-                                name: "password",
-                                value: this.state.password,
-                                onChange: this.onChange
-                              }}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      </CardBody>
-                      <CardFooter>
-                        {this.renderRedirect()}
-                        <Button type="submit" color="info" value="Editar">Editar</Button>
-                      </CardFooter>
-                    </form>
-                  </Card>
-                </GridItem>
-              </GridContainer>
-            </div>
-          );
-    }
+    return (
+      <div>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader color="info">
+                <h4 className={classes.cardTitleWhite}>Usuário</h4>
+              </CardHeader>
+              <form onSubmit={this.edit}>
+                <CardBody>
+                  <GridContainer>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
+                      {this.state.isLoading && (
+                        <span>Carregando, aguarde..</span>
+                      )}
+                      {!this.state.isLoading && (
+                        <Select
+                          classes={classes}
+                          options={allTypeUser}
+                          components={components}
+                          defaultValue={{
+                            label: this.state.description,
+                            value: this.state.idTypeUser
+                          }}
+                          required={true}
+                          onChange={this.handleChange("idTypeUser")}
+                          placeholder="Tipo do Usuário"
+                          isClearable
+                        />
+                      )}
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Nome"
+                        id="name"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "name",
+                          value: this.state.name,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Email"
+                        id="email"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "email",
+                          name: "email",
+                          value: this.state.email,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Senha"
+                        id="password"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "password",
+                          name: "password",
+                          value: this.state.password,
+                          onChange: this.onChange
+                        }}
+                      />
+                    </GridItem>
+                  </GridContainer>
+                </CardBody>
+                <CardFooter>
+                  {this.renderRedirect()}
+                  <Button type="submit" color="info" value="Editar">
+                    Editar
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </GridItem>
+        </GridContainer>
+      </div>
+    );
+  }
 }
 
-    
-        
 export default withStyles(styles)(editUser);
-
-
