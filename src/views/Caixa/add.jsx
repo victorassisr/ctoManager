@@ -182,7 +182,14 @@ class addBox extends React.Component {
       redirect: false,
       city: [],
       location: [],
-      typeBox: []
+      typeBox: [],
+      latitude: "",
+      longitude: "",
+      descricao: "",
+      bairros: [],
+      spliters: [],
+      idBairro: "",
+      idSpliter: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
@@ -213,8 +220,9 @@ class addBox extends React.Component {
   save = async event => {
     event.preventDefault();
     try {
-      const tokenUser = JSON.parse(localStorage.getItem("tokenUser"));
-      await axios.post(`${utils.server}/caixa`, {
+      let tokenUser = null; //Linha a ser retirada..
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.post(`${utils.URL_BASE_API}/ctos`, {
         entryDate: moment(new Date())
           .format("YYYY-MM-DD HH:mm:s")
           .replace(/T/, " "),
@@ -236,7 +244,7 @@ class addBox extends React.Component {
 
   loadCity = async () => {
     try {
-      const res = await axios.get(`${utils.server}/city`);
+      const res = await axios.get(`${utils.URL_BASE_API}/city`);
       this.setState({ city: res.data });
     } catch (err) {
       utils.showError(err);
@@ -245,7 +253,7 @@ class addBox extends React.Component {
 
   loadLocation = async () => {
     try {
-      const res = await axios.get(`${utils.server}/locationFree`);
+      const res = await axios.get(`${utils.URL_BASE_API}/locationFree`);
       this.setState({ location: res.data });
     } catch (err) {
       utils.showError(err);
@@ -254,7 +262,7 @@ class addBox extends React.Component {
 
   loadTypeBox = async () => {
     try {
-      const res = await axios.get(`${utils.server}/typeBox`);
+      const res = await axios.get(`${utils.URL_BASE_API}/typeBox`);
       this.setState({ typeBox: res.data });
     } catch (err) {
       utils.showError(err);
@@ -262,9 +270,9 @@ class addBox extends React.Component {
   };
 
   componentDidMount() {
-    this.loadCity();
-    this.loadLocation();
-    this.loadTypeBox();
+    //this.loadCity();
+    //this.loadLocation();
+    //this.loadTypeBox();
   }
 
   render() {
@@ -326,14 +334,14 @@ class addBox extends React.Component {
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="Lote"
-                        id="lot"
+                        labelText="latitude"
+                        id="lat"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "lot",
-                          value: this.state.lot,
+                          name: "lat",
+                          value: this.state.latitude,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -341,59 +349,29 @@ class addBox extends React.Component {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="Número da caixa"
-                        id="number"
+                        labelText="longitude"
+                        id="lng"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "number",
-                          name: "number",
-                          value: this.state.number,
+                          name: "lng",
+                          value: this.state.longitude,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
                     </GridItem>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
-                      <Select
-                        classes={classes}
-                        options={allLocation}
-                        components={components}
-                        value={this.state.single}
-                        required={true}
-                        onChange={this.handleChange("idLocation")}
-                        placeholder="Localização"
-                        isClearable
-                      />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={4}>
+                    <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="Nome do Cliente"
-                        id="clientName"
+                        labelText="descricao"
+                        id="descricao"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "clientName",
-                          value: this.state.clientName,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        labelText="Casa do Cliente"
-                        id="clientHouse"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "clientHouse",
-                          value: this.state.clientHouse,
+                          name: "desc",
+                          value: this.state.descricao,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -402,27 +380,25 @@ class addBox extends React.Component {
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
                       <Select
                         classes={classes}
-                        options={allCity}
+                        options={this.state.bairros}
                         components={components}
-                        value={this.state.single}
+                        value={this.state.bairros.single}
                         required={true}
                         onChange={this.handleChange("idCity")}
-                        placeholder="Cidade do Cliente"
+                        placeholder="Bairro"
                         isClearable
                       />
                     </GridItem>
-                  </GridContainer>
-                  <GridContainer style={{ paddingTop: 10 }}>
-                    <GridItem xs={12} sm={12} md={12}>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
                       <Select
                         classes={classes}
-                        options={allTypeBox}
+                        options={this.state.spliters}
                         components={components}
-                        value={this.state.multi}
+                        value={this.state.bairros.single}
                         required={true}
-                        onChange={this.handleChange("idTypeBox")}
-                        placeholder="Tipos de Caixa"
-                        isMulti
+                        onChange={this.handleChange("idCity")}
+                        placeholder="Spliter"
+                        isClearable
                       />
                     </GridItem>
                   </GridContainer>
