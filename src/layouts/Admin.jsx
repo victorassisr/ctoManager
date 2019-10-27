@@ -92,53 +92,49 @@ class Dashboard extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
-    return (
-      
-      localStorage.getItem('tokenUser') ? //retirar esta linha para testes sem o banco 
-        <div className={classes.wrapper}>
-            {/*<Redirect to='/admin/home' />*/}
-            <Sidebar
-              routes={menu}
-              logoText={"Fluxo de caixas"}
-              logo={logo}
-              image={this.state.image}
-              handleDrawerToggle={this.handleDrawerToggle}
-              open={this.state.mobileOpen}
-              color={this.state.color}
-              {...rest}
-            />
-            <div className={classes.mainPanel} ref="mainPanel">
-              <Navbar
-                routes={routes}
-                handleDrawerToggle={this.handleDrawerToggle}
-                {...rest}
-              />
-              {this.getRoute() ? (
-                <div className={classes.content}>
-                  <div className={classes.container}>{switchRoutes}</div>
-                </div>
-              ) : (
-                <div className={classes.map}>{switchRoutes}</div>
-              )}
-              {this.getRoute() ? <Footer /> : null}
+    return localStorage.getItem("user") ? ( //retirar esta linha para testes sem o banco
+      <div className={classes.wrapper}>
+        {<Redirect to="/admin/home" />}
+        <Sidebar
+          routes={menu}
+          logoText={"Fluxo de caixas"}
+          logo={logo}
+          image={this.state.image}
+          handleDrawerToggle={this.handleDrawerToggle}
+          open={this.state.mobileOpen}
+          color={this.state.color}
+          {...rest}
+        />
+        <div className={classes.mainPanel} ref="mainPanel">
+          <Navbar
+            routes={routes}
+            handleDrawerToggle={this.handleDrawerToggle}
+            {...rest}
+          />
+          {this.getRoute() ? (
+            <div className={classes.content}>
+              <div className={classes.container}>{switchRoutes}</div>
             </div>
-          
+          ) : (
+            <div className={classes.map}>{switchRoutes}</div>
+          )}
+          {this.getRoute() ? <Footer /> : null}
         </div>
-        : 
-        <div className={classes.wrapper}>
-          <Redirect to='/admin/login' />
-          <div ref="mainPanel">
-            {this.getRoute() ? (
-              <div className={classes.content}>
-                <div className={classes.container}>{switchRoutes}</div>
-              </div>
-            ) : (
-              <div className={classes.map}>{switchRoutes}</div>
-            )}
-            {this.getRoute() ? <Footer /> : null}
-          </div>
-          
-        </div> 
+      </div>
+    ) : (
+      <div className={classes.wrapper}>
+        <Redirect to="/admin/login" />
+        <div ref="mainPanel">
+          {this.getRoute() ? (
+            <div className={classes.content}>
+              <div className={classes.container}>{switchRoutes}</div>
+            </div>
+          ) : (
+            <div className={classes.map}>{switchRoutes}</div>
+          )}
+          {this.getRoute() ? <Footer /> : null}
+        </div>
+      </div>
     );
   }
 }

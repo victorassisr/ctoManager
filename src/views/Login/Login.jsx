@@ -15,7 +15,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-const styles = {
+let styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
     margin: "0",
@@ -59,6 +59,13 @@ const styles = {
     zIndex: 1,
     left: 0,
     right: 0
+  },
+  logged: {
+    color: "#FFF",
+    background: "green",
+    padding: "6px 6px",
+    textAlign: "center",
+    display: "none"
   }
 };
 
@@ -89,26 +96,30 @@ class Login extends React.Component {
 
   login = async event => {
     event.preventDefault();
-    try {
-      axios({
-        method: "post",
-        url: `${utils.URL_BASE_API}/auth`,
-        data: {
-          usuario: this.state.usuario,
-          senha: this.state.senha
-        }
+    axios({
+      method: "post",
+      url: `${utils.URL_BASE_API}/auth`,
+      data: {
+        usuario: this.state.usuario,
+        senha: this.state.senha
+      }
+    })
+      .then(data => {
+        sessionStorage.setItem("user", JSON.stringify(data.data));
+        alert("Logado com sucesso!");
+        //Redireciona o usuário após o login.
+        this.setRedirect(true);
       })
-        .then(data => {
-          console.log(data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      .catch(err => {
+        if (err.response) {
+          utils.showError(err.response);
+          return;
+        }
+        utils.showError("Erro ao realizar o login.\nTente novamente.");
+        return;
+      });
 
-      //axios.defaults.headers.common["X-Access-Token"] = res.data.token;
-    } catch (err) {
-      utils.showError(err);
-    }
+    //axios.defaults.headers.common["X-Access-Token"] = res.data.token;
   };
 
   render() {
@@ -116,6 +127,7 @@ class Login extends React.Component {
 
     return (
       <div>
+        <div className={classes.logged}>Logado com sucesso...</div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={3} />
           <GridItem xs={12} sm={12} md={6}>
