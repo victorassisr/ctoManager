@@ -89,21 +89,35 @@ class Index extends React.Component {
   }
 
   deleteCaixa = async idCaixa => {
-    try {
-      await axios.delete(`${utils.server}/caixa/${idCaixa}`);
-      await this.loadCaixa();
-    } catch (err) {
-      utils.showError(err);
-    }
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    axios
+      .delete(`${utils.URL_BASE_API}/${idCaixa}`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.state.caixas = res.data;
+      })
+      .catch(err => {
+        alert(err.response);
+      });
   };
 
   loadCaixa = async () => {
-    try {
-      const res = await axios.get(`${utils.server}/caixa`);
-      this.setState({ caixas: res.data });
-    } catch (err) {
-      utils.showError(err);
-    }
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    axios
+      .get(`${utils.URL_BASE_API}/ctos`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ caixas: res.data });
+      })
+      .catch(err => {
+        alert(err.response);
+      });
   };
 
   confirmDelete = async idCaixa => {
@@ -157,32 +171,30 @@ class Index extends React.Component {
 
     const allCaixas = currentAll.map(caixa => {
       return [
-        caixa.lot,
-        moment(caixa.entryDate).format("D/M/YYYY, HH:mm"),
-        caixa.clientName,
-        caixa.clientHouse,
-        String(caixa.weight),
-        caixa.outDate == null
-          ? " - "
-          : moment(caixa.outDate).format("D/M/YYYY, HH:mm"),
+        caixa.idCaixa,
+        caixa.descricao,
+        caixa.bairro.descricao,
+        caixa.spliter.descricao,
+        caixa.latitude,
+        caixa.longitude,
         <div>
           <Button
             value="Ver"
             color="success"
-            onClick={this.setRedirect.bind(this, `viewCaixa/${caixa.lot}`)}
+            onClick={this.setRedirect.bind(this, `viewCaixa/${caixa.idCaixa}`)}
           >
             Ver
           </Button>
           <Button
             value="Editar"
             color="warning"
-            onClick={this.setRedirect.bind(this, `editCaixa/${caixa.id}`)}
+            onClick={this.setRedirect.bind(this, `editCaixa/${caixa.idCaixa}`)}
           >
             Editar
           </Button>
           <Button
             value="Excluir"
-            onClick={this.confirmDelete.bind(this, caixa.id)}
+            onClick={this.confirmDelete.bind(this, caixa.idCaixa)}
             color="danger"
           >
             Excluir
@@ -214,12 +226,12 @@ class Index extends React.Component {
                 <Table
                   tableHeaderColor="info"
                   tableHead={[
-                    "Tipo",
-                    "Entrada",
-                    "Cliente",
-                    "Casa",
-                    "Id",
-                    "Saída",
+                    "#",
+                    "Descrição",
+                    "Bairro",
+                    "Spliter",
+                    "Latitude",
+                    "Longitude",
                     "Gerenciar"
                   ]}
                   tableData={allCaixas}
