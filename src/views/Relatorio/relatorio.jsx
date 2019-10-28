@@ -60,14 +60,13 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      caixas: [],
+      instalacoes: [],
       currentPage: 1,
       allPerPage: 15,
       redirect: false,
       page: ""
     };
-    this.loadCaixa = this.loadCaixa.bind(this);
-    this.deleteCaixa = this.deleteCaixa.bind(this);
+    this.loadInstalacoes = this.loadInstalacoes.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
   }
@@ -88,57 +87,27 @@ class Index extends React.Component {
     this.setState({ currentPage: Number(event.target.dataset.id) });
   }
 
-  deleteCaixa = async idCaixa => {
+  loadInstalacoes = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     axios
-      .delete(`${utils.URL_BASE_API}/${idCaixa}`, {
+      .get(`${utils.URL_BASE_API}/instalacoes/periodo/20191025/20191030`, {
         headers: {
           "X-Access-Token": user.token
         }
+      // .get(`${utils.URL_BASE_API}/instalacoes`, {
+      //   headers: {
+      //     "X-Access-Token": user.token
+      //   }
       })
       .then(res => {
-        this.state.caixas = res.data;
+        this.setState({ instalacoes: res.data });
       })
       .catch(err => {
         alert(err.response);
       });
   };
-
-  loadCaixa = async () => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    axios
-      .get(`${utils.URL_BASE_API}/ctos`, {
-        headers: {
-          "X-Access-Token": user.token
-        }
-      })
-      .then(res => {
-        this.setState({ caixas: res.data });
-      })
-      .catch(err => {
-        alert(err.response);
-      });
-  };
-
-  confirmDelete = async idCaixa => {
-    confirmAlert({
-      message: "Você quer deletar essa caixa?",
-      buttons: [
-        {
-          label: "Sim",
-          value: "Sim",
-          onClick: async () => this.deleteCaixa(idCaixa)
-        },
-        {
-          label: "Não",
-          value: "Não"
-        }
-      ]
-    });
-  };
-
   componentDidMount() {
-    this.loadCaixa();
+    this.loadInstalacoes();
   }
 
   render() {
@@ -146,11 +115,11 @@ class Index extends React.Component {
     //logica pagination
     const indexOfLastAll = this.state.currentPage * this.state.allPerPage;
     const indexOfFirstAll = indexOfLastAll - this.state.allPerPage;
-    const currentAll = this.state.caixas.slice(indexOfFirstAll, indexOfLastAll);
+    const currentAll = this.state.instalacoes.slice(indexOfFirstAll, indexOfLastAll);
     const pageNumbers = [];
     for (
       let i = 1;
-      i <= Math.ceil(this.state.caixas.length / this.state.allPerPage);
+      i <= Math.ceil(this.state.instalacoes.length / this.state.allPerPage);
       i++
     ) {
       pageNumbers.push(i);
@@ -168,73 +137,78 @@ class Index extends React.Component {
         </li>
       );
     });
-
-    const allCaixas = currentAll.map(caixa => {
+       const allInstalacoes = currentAll.map(instalacoes => {
       return [
-        caixa.idCaixa,
-        caixa.descricao,
-        caixa.bairro.descricao,
-        caixa.spliter.descricao,
-        caixa.latitude,
-        caixa.longitude,
         <div>
-          <Button
-            value="Ver"
-            color="success"
-            onClick={this.setRedirect.bind(this, `viewCaixa/${caixa.idCaixa}`)}
-          >
-            Ver
-          </Button>
-          <Button
-            value="Editar"
-            color="warning"
-            onClick={this.setRedirect.bind(this, `editCaixa/${caixa.idCaixa}`)}
-          >
-            Editar
-          </Button>
-          <Button
-            value="Excluir"
-            onClick={this.confirmDelete.bind(this, caixa.idCaixa)}
-            color="danger"
-          >
-            Excluir
-          </Button>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                    <h4>
+                        DataInstalacao:{" "}
+                        <label className={classes.labelInfo}>
+                          {moment(instalacoes.dataInstalacao).format("D/M/YYYY")}
+                        </label>
+                      </h4>
+                      <h4>
+                        Funcionário:{" "}
+                        <label className={classes.labelInfo}>
+                        {String(instalacoes.IdPessoaFuncionario)}
+                        </label>
+                      </h4>
+                      <h4>
+                        Cliente:{" "}
+                        <label className={classes.labelInfo}>
+                          {String(instalacoes.IdPessoaCliente)}
+                        </label>
+                      </h4>
+                      <h4>
+                        Porta:{" "}
+                        <label className={classes.labelInfo}>
+                        {String(instalacoes.Porta)}
+                        </label>
+                      </h4>
+                      <h4>
+                        Caixa:{" "}
+                        <label className={classes.labelInfo}>
+                          {String(instalacoes.idCaixa)}
+                        </label>
+                      </h4>
+                      <h4>
+                        Endereço:{" "}
+                        <label className={classes.labelInfo}>
+                        { 
+                          // instalacoes.rua 
+
+                          `, ${instalacoes.numero} 
+                          ${instalacoes.complemento == null
+                            ? " "
+                            : '/' + instalacoes.complemento
+                          }
+                          - Bairro:  ${instalacoes.descricao} `
+                        }
+                        </label>
+                      </h4>                     
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6} />
+                  </GridContainer>
         </div>
       ];
     });
-
+ 
     return (
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Instalações neste período</h4>
+                <h4 className={classes.cardTitleWhite}>Relatório de Instalações</h4>
               </CardHeader>
-              <div style={{ marginTop: 5, marginLeft: 15, marginRight: 15 }}>
-                {this.renderRedirect()}
-                <Button
-                  value="Novo"
-                  style={{ float: "right" }}
-                  color="info"
-                  onClick={this.setRedirect.bind(this, "addBox")}
-                >
-                  Novo
-                </Button>
-              </div>
               <CardBody style={{ paddingTop: 0 }}>
                 <Table
                   tableHeaderColor="info"
                   tableHead={[
-                    "#",
-                    "Descrição",
-                    "Bairro",
-                    "Spliter",
-                    "Latitude",
-                    "Longitude",
-                    "Gerenciar"
+                    "Descrição"
                   ]}
-                  tableData={allCaixas}
+                  tableData={allInstalacoes}
                 />
               </CardBody>
               <div>
@@ -251,10 +225,10 @@ class Index extends React.Component {
                   <li
                     className={classes.itemNumber}
                     key={Math.ceil(
-                      this.state.caixas.length / this.state.allPerPage
+                      this.state.instalacoes.length / this.state.allPerPage
                     )}
                     data-id={Math.ceil(
-                      this.state.caixas.length / this.state.allPerPage
+                      this.state.instalacoes.length / this.state.allPerPage
                     )}
                     onClick={this.handleClick}
                   >
