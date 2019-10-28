@@ -6,7 +6,6 @@ import addBox from "views/Caixa/add.jsx";
 import editBox from "views/Caixa/edit.jsx";
 import viewBox from "views/Caixa/view.jsx";
 
-
 import Login from "views/Login/Login.jsx";
 
 import User from "views/User/index.jsx";
@@ -14,6 +13,9 @@ import addUser from "views/User/add.jsx";
 import editUser from "views/User/edit.jsx";
 
 import Location from "views/Location/index.jsx";
+
+import GerarRelatorio from "views/Relatorio/index.jsx";
+import Relatorio from "views/Relatorio/relatorio.jsx";
 
 const dashboardRoutes = [
   {
@@ -45,6 +47,18 @@ const dashboardRoutes = [
     name: "Visualizar Caixas",
     component: viewBox,
     layout: "/admin"
+  },
+  {
+    path: "/gerarRelatorio",
+    name: "Gerar relatório",
+    component: GerarRelatorio,
+    layout: "/admin"
+  },
+  {
+  path: "/relatorio",
+  name: "Relatório",
+  component: Relatorio,
+  layout: "/admin"
   },
   {
     path: "/user",
