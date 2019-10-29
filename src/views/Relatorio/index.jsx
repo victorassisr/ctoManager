@@ -66,9 +66,23 @@ class Index extends React.Component {
       allPerPage: 15,
       redirect: false,
       dataInicial : "",
-      dataFinal : ""
+      dataFinal : "",
+      value: ''
     };
     this.renderRedirect = this.renderRedirect.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.dataInicial});
+    this.setState({value: event.target.dataFinal});
+  }
+
+  handleSubmit(event) {
+    alert('Enviado ' + this.state.dataInicial);
+    alert('Enviado ' + this.state.dataFinal);
+    event.preventDefault();
   }
 
   setRedirect = page => {
@@ -94,7 +108,8 @@ class Index extends React.Component {
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>Gerar relatório de instalações</h4>
               </CardHeader>
-              <form onSubmit={this.save}>
+              <form onSubmit={this.handlerSubmit}>
+      
                 <CardBody>
                   <GridContainer style={{ paddingTop: 10 }}>
                     <GridItem xs={6} sm={6} md={6}>
@@ -102,6 +117,7 @@ class Index extends React.Component {
                             id="dataInicial"
                             name="dataInicial"
                             label="Data Inicial:"
+                            value={this.state.dataInicial} onChange={this.handleChange}
                             type="date"
                             className={classes.textField}
                             InputLabelProps={{
@@ -114,6 +130,7 @@ class Index extends React.Component {
                             id="dataFinal"
                             name="dataFinal"
                             label="Data Final:"
+                            value={this.state.dataFinal} onChange={this.handleChange}
                             type="date"
                             className={classes.textField}
                             InputLabelProps={{

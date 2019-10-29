@@ -139,12 +139,6 @@ class Index extends React.Component {
         <div>
                   <GridContainer>
                     <GridItem xs={6} sm={6} md={6}>
-                    {/* <h4>
-                        Data da Instalação:{" "}
-                        <label className={classes.labelInfo}>
-                          {moment(instalacoes.dataInstalacao).format("D/M/YYYY")}
-                        </label>
-                      </h4> */}
                       <h4>
                         Funcionário:{" "}
                         <label className={classes.labelInfo}>
