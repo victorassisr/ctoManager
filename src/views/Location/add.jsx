@@ -178,6 +178,7 @@ class addBox extends React.Component {
       clientHouse: "",
       clientName: "",
       lot: "",
+      bairros: [],
       number: "",
       redirect: false
     };
@@ -211,12 +212,16 @@ class addBox extends React.Component {
   save = async event => {
     event.preventDefault();
     try {
-      await axios.post(`${utils.server}/caixa`, {
+      let tokenUser = null; //Linha a ser retirada..
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.post(`${utils.URL_BASE_API}/ctos`, {
         entryDate: moment(new Date())
           .format("YYYY-MM-DD HH:mm:s")
           .replace(/T/, " "),
         idLocation: this.state.idLocation.value,
         idUser: 1,
+        bairros: this.state.bairros,
+        idBairros: this.state.idBairros.value,
         lot: this.state.lot,
         number: this.state.number,
         clienteName: this.state.clientName,
@@ -271,6 +276,16 @@ class addBox extends React.Component {
     ].map(locations => ({
       value: locations.value,
       label: locations.label
+    }));
+
+    const bairros = [
+      { label: "Alvorada", value: 1 },
+      { label: "Ipanema", value: 2 },
+      { label: "Eldorado", value: 3 },
+      { label: "Lagoinha", value: 4 }
+    ].map(bairros => ({
+      value: bairros.value,
+      label: bairros.label
     }));
 
     return (
@@ -368,6 +383,18 @@ class addBox extends React.Component {
                         required={true}
                         onChange={this.handleChange("idCity")}
                         placeholder="Cidade do Cliente"
+                        isClearable
+                      />
+                    </GridItem>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
+                      <Select
+                        classes={classes}
+                        options={bairros}
+                        components={components}
+                        value={this.state.single}
+                        required={true}
+                        onChange={this.handleChange("idBairros")}
+                        placeholder="Bairro do Cliente"
                         isClearable
                       />
                     </GridItem>

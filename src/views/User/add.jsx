@@ -210,7 +210,8 @@ class addBox extends React.Component {
   save = async event => {
     event.preventDefault();
     try {
-      await axios.post(`${utils.server}/user`, {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.post(`${utils.URL_BASE_API}/user`, {
         idTypeUser: this.state.idTypeUser.value,
         name: this.state.name,
         email: this.state.email,
@@ -224,7 +225,7 @@ class addBox extends React.Component {
 
   loadTypeUser = async () => {
     try {
-      const res = await axios.get(`${utils.server}/typeuser`);
+      const res = await axios.get(`${utils.URL_BASE_API}/typeuser`);
       this.setState({ typeUser: res.data });
     } catch (err) {
       utils.showError(err);

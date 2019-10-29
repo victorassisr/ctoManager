@@ -70,8 +70,13 @@ class Index extends React.Component {
 
   loadLocation = async () => {
     try {
-      const res = await axios.get(`${utils.server}/location`);
-      this.setState({ locations: res.data });
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.get(`${utils.URL_BASE_API}/ctos`,{
+        headers: {
+          "X-Access-Token": user.token
+        }
+      });
+      this.setState({ locations: user.data });
     } catch (err) {
       utils.showError(err);
     }
@@ -142,7 +147,10 @@ class Index extends React.Component {
                     "Avenida",
                     "Rua",
                     "Posição",
-                    "Casa"
+                    "Casa",
+                    "Bairro",
+                    "Latitude",
+                    "Longitude"
                   ]}
                   tableData={allLocations}
                 />

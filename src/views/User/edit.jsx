@@ -213,7 +213,7 @@ class editUser extends React.Component {
     event.preventDefault();
 
     try {
-      await axios.put(`${utils.server}/user`, {
+      await axios.put(`${utils.URL_BASE_API}/user`, {
         idUser: this.props.match.params.id,
         idTypeUser:
           typeof this.state.idTypeUser.value == "undefined"
@@ -231,14 +231,15 @@ class editUser extends React.Component {
 
   loadUser = async () => {
     try {
-      const res = await axios.get(
-        `${utils.server}/user/${this.props.match.params.id}`
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.get(
+        `${utils.URL_BASE_API}/user/${this.props.match.params.id}`
       );
       this.setState({
-        name: res.data.name,
-        email: res.data.email,
-        description: res.data.description,
-        idTypeUser: res.data.idTypeUser,
+        name: user.data.name,
+        email:user.data.email,
+        description: user.data.description,
+        idTypeUser: user.data.idTypeUser,
         isLoading: false
       });
     } catch (err) {
@@ -248,7 +249,8 @@ class editUser extends React.Component {
 
   loadTypeUser = async () => {
     try {
-      const resTypeUser = await axios.get(`${utils.server}/typeuser`);
+      const resTypeUser = JSON.parse(sessionStorage.getItem("user"));
+      await axios.get(`${utils.URL_BASE_API}/typeuser`);
       this.setState({ typeUser: resTypeUser.data });
     } catch (err) {
       utils.showError(err);

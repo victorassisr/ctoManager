@@ -176,6 +176,7 @@ class editBox extends React.Component {
     this.state = {
       boxValue: "",
       typeBoxValue: [],
+      bairros: "",
       clientHouse: "",
       clientName: "",
       lot: "",
@@ -220,7 +221,8 @@ class editBox extends React.Component {
     event.preventDefault();
 
     try {
-      await axios.put(`${utils.server}/caixa`, {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.put(`${utils.URL_BASE_API}/ctos`, {
         idBox: this.props.match.params.id,
         idLocation:
           typeof this.state.idLocation.value == "undefined"
@@ -228,13 +230,17 @@ class editBox extends React.Component {
             : this.state.idLocation.value,
         lot: this.state.lot,
         number: this.state.number,
+        bairros: 
+          typeof this.state.bairros.value == "undefined"
+          ? this.state.bairros
+          : this.state.bairros.value,
         clientName: this.state.clientName,
         clientHouse: this.state.ClientHouse,
         idCity:
           typeof this.state.idCity.value == "undefined"
             ? this.state.idCity
             : this.state.idCity.value
-        //idTypeCoffe: typeof this.state.idTypeCoffe.value == 'undefined' ? this.state.idTypeCoffe.map(type => ( type.idTypeCoffe )) : this.state.idTypeCoffe.value.map(type => ( type.idTypeCoffe )),
+        
       });
       this.setRedirect();
     } catch (err) {
@@ -244,9 +250,12 @@ class editBox extends React.Component {
 
   loadBox = async () => {
     try {
-      const resBox = await axios.get(
-        `${utils.server}/caixa/${this.props.match.params.id}`
-      );
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const resBox = await axios.get(`${utils.URL_BASE_API}/caixa/${this.props.match.params.id}`,{
+        headers: {
+          "X-Access-Token": user.token
+        }
+      });
       const resType = await axios.get(
         `${utils.server}/caixaTypeBox/${this.props.match.params.id}`
       );
@@ -254,6 +263,9 @@ class editBox extends React.Component {
         lot: resBox.data.lot,
         number: resBox.data.number,
         idCity: resBox.data.idCity,
+        longitude: resBox.data.longitude,
+        latitude: resBOx.data.latitude,
+        bairros: resBox.data.bairros,
         clientName: resBox.data.clientName,
         idLocation: resBox.data.idLocation,
         clientHouse: resBox.data.clientHouse,
@@ -312,6 +324,16 @@ class editBox extends React.Component {
     ].map(locations => ({
       value: locations.value,
       label: locations.label
+    }));
+
+    const bairros = [
+      { label: "Alvorada", value: 1 },
+      { label: "Ipanema", value: 2 },
+      { label: "Eldorado", value: 3 },
+      { label: "Lagoinha", value: 4 }
+    ].map(bairros => ({
+      value: bairros.value,
+      label: bairros.label
     }));
 
     return (
@@ -413,6 +435,49 @@ class editBox extends React.Component {
                         }}
                       />
                     </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="bairros"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "bairros",
+                          value: this.state.bairros,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="latitude"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "latitude",
+                          value: this.state.latitude,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      /> 
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="longitude"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "longitude",
+                          value: this.state.longitude,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      
+                    </GridItem>
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
                       {this.state.isLoading && (
                         <span>Carregando, aguarde..</span>
@@ -432,6 +497,7 @@ class editBox extends React.Component {
                           isClearable
                         />
                       )}
+                      
                     </GridItem>
                   </GridContainer>
                   <GridContainer style={{ paddingTop: 10 }}>

@@ -89,7 +89,12 @@ class Index extends React.Component {
 
   deleteUser = async idUser => {
     try {
-      await axios.delete(`${utils.server}/user/${idUser}`);
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.delete(`${utils.URL_BASE_API}/user/${idUser}`,{
+        headers: {
+          "X-Access-Token": user.token
+        }
+      });
       await this.loadUser();
     } catch (err) {
       utils.showError(err);
@@ -98,7 +103,8 @@ class Index extends React.Component {
 
   loadUser = async () => {
     try {
-      const res = await axios.get(`${utils.server}/user`);
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios.get(`${utils.URL_BASE_API}/user`);
       this.setState({ users: res.data });
     } catch (err) {
       utils.showError(err);

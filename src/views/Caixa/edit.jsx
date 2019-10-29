@@ -174,6 +174,21 @@ class editBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientHouse: "",
+      clientName: "",
+      lot: "",
+      number: "",
+      redirect: false,
+      city: [],
+      location: [],
+      typeBox: [],
+      latitude: "",
+      longitude: "",
+      descricao: "",
+      bairros: [],
+      spliters: [],
+      idBairro: "",
+      idSpliter: "",
       boxValue: "",
       clientHouse: "",
       clientName: "",
@@ -222,13 +237,23 @@ class editBox extends React.Component {
     event.preventDefault();
 
     try {
-      await axios.put(`${utils.server}/caixa`, {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      await axios.put(`${utils.URL_BASE_API}/ctos`, {
         idBox: this.props.match.params.id,
         idLocation:
           typeof this.state.idLocation.value == "undefined"
             ? this.state.idLocation
             : this.state.idLocation.value,
         lot: this.state.lot,
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        descricao: this.state.descricaoS,
+        bairros: this.state.bairros,
+        spliters: this.state.spliters,
+        idBairro: 
+          typeof this.state.idBairro.value == "undefined"
+          ? this.state.idBairro
+          : this.state.idBairro.value,
         number: this.state.number,
         clientName: this.state.clientName,
         clientHouse: this.state.clientHouse,
@@ -250,12 +275,19 @@ class editBox extends React.Component {
   loadBox = async () => {
     try {
       const resBox = await axios.get(
-        `${utils.server}/caixa/${this.props.match.params.id}`
+        `${utils.URL_BASE_API}/caixa/${this.props.match.params.id}`
       );
       const resType = await axios.get(
-        `${utils.server}/bagTypeBox/${this.props.match.params.id}`
+        `${utils.URL_BASE_API}/boxTypeBox/${this.props.match.params.id}`
       );
       this.setState({
+        latitude: resBox.data.latitude,
+        longitude: resBox.data.longitude,
+        descricao: resBox.data.descricao,
+        bairros: resBox.data.bairros,
+        spliters: resBox.data.spliters,
+        idBairro: resBox.data.idBairro,
+        idSpliter: resBox.data.idSpliter,
         lot: resBox.data.lot,
         number: resBox.data.number,
         idCity: resBox.data.idCity,
@@ -273,7 +305,7 @@ class editBox extends React.Component {
 
   loadCity = async () => {
     try {
-      const res = await axios.get(`${utils.server}/city`);
+      const res = await axios.get(`${utils.URL_BASE_API}/city`);
       this.setState({ city: res.data });
     } catch (err) {
       utils.showError(err);
@@ -282,7 +314,7 @@ class editBox extends React.Component {
 
   loadLocation = async () => {
     try {
-      const res = await axios.get(`${utils.server}/locationFree`);
+      const res = await axios.get(`${utils.URL_BASE_API}/locationFree`);
       this.setState({ location: res.data });
     } catch (err) {
       utils.showError(err);
@@ -358,7 +390,7 @@ class editBox extends React.Component {
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Saca de Café</h4>
+                <h4 className={classes.cardTitleWhite}>Caixa</h4>
               </CardHeader>
               <form onSubmit={this.edit}>
                 <CardBody>
@@ -420,6 +452,48 @@ class editBox extends React.Component {
                           isClearable
                         />
                       )}
+                      <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="bairro"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "bairro",
+                          value: this.state.bairros,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                      <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="latitude"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "latitude",
+                          value: this.state.latitude,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="longitude"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "longitude",
+                          value: this.state.longitude,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                    </GridItem>
                     </GridItem>
                   </GridContainer>
                   <GridContainer>
@@ -490,6 +564,34 @@ class editBox extends React.Component {
                           isMulti
                         />
                       )}
+                      <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="spliters"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "spliters",
+                          value: this.state.spliters,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="descricao"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "descricao",
+                          value: this.state.descricao,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
                     </GridItem>
                   </GridContainer>
                 </CardBody>
