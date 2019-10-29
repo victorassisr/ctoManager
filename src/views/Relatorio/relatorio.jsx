@@ -94,10 +94,6 @@ class Index extends React.Component {
         headers: {
           "X-Access-Token": user.token
         }
-      // .get(`${utils.URL_BASE_API}/instalacoes`, {
-      //   headers: {
-      //     "X-Access-Token": user.token
-      //   }
       })
       .then(res => {
         this.setState({ instalacoes: res.data });
@@ -139,46 +135,53 @@ class Index extends React.Component {
     });
        const allInstalacoes = currentAll.map(instalacoes => {
       return [
+        String(moment(instalacoes.dataInstalacao).format("D/M/YYYY")),
         <div>
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
-                    <h4>
-                        DataInstalacao:{" "}
+                    <GridItem xs={6} sm={6} md={6}>
+                    {/* <h4>
+                        Data da Instalação:{" "}
                         <label className={classes.labelInfo}>
                           {moment(instalacoes.dataInstalacao).format("D/M/YYYY")}
                         </label>
-                      </h4>
+                      </h4> */}
                       <h4>
                         Funcionário:{" "}
                         <label className={classes.labelInfo}>
-                        {String(instalacoes.IdPessoaFuncionario)}
+                        {instalacoes.NomeFunc} {instalacoes.SobrenomeFunc}
                         </label>
                       </h4>
-                      <h4>
-                        Cliente:{" "}
-                        <label className={classes.labelInfo}>
-                          {String(instalacoes.IdPessoaCliente)}
-                        </label>
-                      </h4>
+                      <GridContainer>
+                      <GridItem xs={6} sm={6} md={6}>
                       <h4>
                         Porta:{" "}
                         <label className={classes.labelInfo}>
                         {String(instalacoes.Porta)}
                         </label>
                       </h4>
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={6}>
                       <h4>
                         Caixa:{" "}
                         <label className={classes.labelInfo}>
                           {String(instalacoes.idCaixa)}
                         </label>
                       </h4>
+                      </GridItem>
+                      </GridContainer>
+                    </GridItem>  
+                    <GridItem xs={6} sm={6} md={6}>                      
+                      <h4>
+                        Cliente:{" "}
+                        <label className={classes.labelInfo}>
+                        {instalacoes.NomeCliente} {instalacoes.SobrenomeCliente}
+                        </label>
+                      </h4>
                       <h4>
                         Endereço:{" "}
                         <label className={classes.labelInfo}>
                         { 
-                          // instalacoes.rua 
-
-                          `, ${instalacoes.numero} 
+                          ` ${instalacoes.rua}, ${instalacoes.numero} 
                           ${instalacoes.complemento == null
                             ? " "
                             : '/' + instalacoes.complemento
@@ -188,7 +191,6 @@ class Index extends React.Component {
                         </label>
                       </h4>                     
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={6} />
                   </GridContainer>
         </div>
       ];
@@ -206,6 +208,7 @@ class Index extends React.Component {
                 <Table
                   tableHeaderColor="info"
                   tableHead={[
+                    "Data da instalação",
                     "Descrição"
                   ]}
                   tableData={allInstalacoes}
