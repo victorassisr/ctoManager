@@ -100,7 +100,7 @@ class Index extends React.Component {
         this.state.caixas = res.data;
       })
       .catch(err => {
-        alert(err.response);
+        console.log(err.response);
       });
   };
 
@@ -116,7 +116,11 @@ class Index extends React.Component {
         this.setState({ caixas: res.data });
       })
       .catch(err => {
-        alert(err.response);
+        if (err.response.data.error.message) {
+          alert(err.response.data.error.message);
+        } else {
+          alert("Erro ao carregar os dados.");
+        }
       });
   };
 

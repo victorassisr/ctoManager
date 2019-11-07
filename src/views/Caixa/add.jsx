@@ -175,14 +175,7 @@ class addBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientHouse: "",
-      clientName: "",
-      lot: "",
-      number: "",
       redirect: false,
-      city: [],
-      location: [],
-      typeBox: [],
       latitude: "",
       longitude: "",
       descricao: "",
@@ -193,6 +186,7 @@ class addBox extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
+    this.loadBairros = this.loadBairros.bind(this);
   }
 
   setRedirect = () => {
@@ -222,7 +216,16 @@ class addBox extends React.Component {
     try {
       let tokenUser = null; //Linha a ser retirada..
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.post(`${utils.URL_BASE_API}/ctos`, {
+
+      await axios.post(`${utils.URL_BASE_API}/ctos}`, {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        descricao: this.state.descricao,
+        idBairro: this.state.idBairro,
+        idSpliter: this.state.idSpliter
+      });
+
+      /*await axios.post(`${utils.URL_BASE_API}/ctos`, {
         entryDate: moment(new Date())
           .format("YYYY-MM-DD HH:mm:s")
           .replace(/T/, " "),
@@ -234,14 +237,14 @@ class addBox extends React.Component {
         clientHouse: this.state.clientHouse,
         idCity: this.state.idCity.value,
         idTypeBox: this.state.idTypeBox.map(item => item.value)
-      });
+      });*/
 
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
     }
   };
-
+  /*
   loadCity = async () => {
     try {
       const res = await axios.get(`${utils.URL_BASE_API}/city`);
@@ -274,7 +277,11 @@ class addBox extends React.Component {
     //this.loadLocation();
     //this.loadTypeBox();
   }
+*/
 
+  componentDidMount() {
+    this.state.loadBairros();
+  }
   render() {
     const { classes } = this.props;
 
@@ -288,6 +295,20 @@ class addBox extends React.Component {
       SingleValue
     };
 
+    loadBairros = async () => {
+      const user = sessionStorage.getItem("user");
+
+      axios
+        .get(`${utils.URL_BASE_API}/bairros`)
+        .then(res => {
+          this.state.bairros = res.data;
+        })
+        .catch(err => {
+          alert(err);
+        });
+    };
+
+    /*
     const allCity = this.state.city
       .map(city => {
         return { label: city.description, value: city.id };
@@ -320,7 +341,7 @@ class addBox extends React.Component {
         value: typesBox.value,
         label: typesBox.label
       }));
-
+*/
     return (
       <div>
         <GridContainer>
@@ -386,7 +407,7 @@ class addBox extends React.Component {
                         required={true}
                         onChange={this.handleChange("idCity")}
                         placeholder="Bairro"
-                        isClearable
+                        isClearable="false"
                       />
                     </GridItem>
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
@@ -398,7 +419,7 @@ class addBox extends React.Component {
                         required={true}
                         onChange={this.handleChange("idCity")}
                         placeholder="Spliter"
-                        isClearable
+                        isClearable="false"
                       />
                     </GridItem>
                   </GridContainer>
