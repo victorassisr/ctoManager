@@ -187,6 +187,7 @@ class addBox extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
     this.loadBairros = this.loadBairros.bind(this);
+    this.loadSpliters = this.loadSpliters.bind(this);
   }
 
   setRedirect = () => {
@@ -213,7 +214,10 @@ class addBox extends React.Component {
 
   save = async event => {
     event.preventDefault();
-    try {
+
+    console.log(this.state);
+
+    /*try {
       let tokenUser = null; //Linha a ser retirada..
       const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -224,25 +228,10 @@ class addBox extends React.Component {
         idBairro: this.state.idBairro,
         idSpliter: this.state.idSpliter
       });
-
-      /*await axios.post(`${utils.URL_BASE_API}/ctos`, {
-        entryDate: moment(new Date())
-          .format("YYYY-MM-DD HH:mm:s")
-          .replace(/T/, " "),
-        idLocation: this.state.idLocation.value,
-        idUser: tokenUser.id,
-        lot: this.state.lot,
-        number: this.state.number,
-        clientName: this.state.clientName,
-        clientHouse: this.state.clientHouse,
-        idCity: this.state.idCity.value,
-        idTypeBox: this.state.idTypeBox.map(item => item.value)
-      });*/
-
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
-    }
+    }*/
   };
   /*
   loadCity = async () => {
@@ -280,8 +269,44 @@ class addBox extends React.Component {
 */
 
   componentDidMount() {
-    this.state.loadBairros();
+    this.loadBairros();
+    this.loadSpliters();
   }
+
+  loadBairros = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    axios
+      .get(`${utils.URL_BASE_API}/bairros`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.state.bairros = res.data;
+      })
+      .catch(err => {
+        alert("Não foi encontrado nenhum bairro cadastrado.");
+      });
+  };
+
+  loadSpliters = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    axios
+      .get(`${utils.URL_BASE_API}/spliters`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.state.spliters = res.data;
+      })
+      .catch(err => {
+        alert("Não foi encontrado nenhum spliter cadastrado.");
+      });
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -293,19 +318,6 @@ class addBox extends React.Component {
       Option,
       Placeholder,
       SingleValue
-    };
-
-    loadBairros = async () => {
-      const user = sessionStorage.getItem("user");
-
-      axios
-        .get(`${utils.URL_BASE_API}/bairros`)
-        .then(res => {
-          this.state.bairros = res.data;
-        })
-        .catch(err => {
-          alert(err);
-        });
     };
 
     /*
@@ -355,13 +367,13 @@ class addBox extends React.Component {
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="latitude"
+                        labelText="Latitude"
                         id="lat"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "lat",
+                          name: "latitude",
                           value: this.state.latitude,
                           onChange: this.onChange,
                           required: true
@@ -370,13 +382,13 @@ class addBox extends React.Component {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="longitude"
-                        id="lng"
+                        labelText="Longitude"
+                        id="longitude"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "lng",
+                          name: "longitude",
                           value: this.state.longitude,
                           onChange: this.onChange,
                           required: true
@@ -385,13 +397,13 @@ class addBox extends React.Component {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        labelText="descricao"
+                        labelText="Descricao"
                         id="descricao"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "desc",
+                          name: "descricao",
                           value: this.state.descricao,
                           onChange: this.onChange,
                           required: true
@@ -405,7 +417,7 @@ class addBox extends React.Component {
                         components={components}
                         value={this.state.bairros.single}
                         required={true}
-                        onChange={this.handleChange("idCity")}
+                        onChange={this.handleChange("idBairro")}
                         placeholder="Bairro"
                         isClearable="false"
                       />
@@ -417,7 +429,7 @@ class addBox extends React.Component {
                         components={components}
                         value={this.state.bairros.single}
                         required={true}
-                        onChange={this.handleChange("idCity")}
+                        onChange={this.handleChange("idSpliter")}
                         placeholder="Spliter"
                         isClearable="false"
                       />
