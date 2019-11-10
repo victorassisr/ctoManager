@@ -174,7 +174,7 @@ class editUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       name: "",
       email: "",
       password: "",
@@ -212,17 +212,26 @@ class editUser extends React.Component {
   edit = async event => {
     event.preventDefault();
 
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
     try {
-      await axios.put(`${utils.URL_BASE_API}/user`, {
-        idUser: this.props.match.params.id,
-        idTypeUser:
-          typeof this.state.idTypeUser.value == "undefined"
-            ? this.state.idTypeUser
-            : this.state.idTypeUser.value,
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
-      });
+      await axios.put(
+        `${utils.URL_BASE_API}/funcionarios/${this.props.match.params.id}`,
+        {
+          idTypeUser:
+            typeof this.state.idTypeUser.value == "undefined"
+              ? this.state.idTypeUser
+              : this.state.idTypeUser.value,
+          nome: this.state.name,
+          usuario: this.state.email,
+          senha: this.state.password
+        },
+        {
+          headers: {
+            "X-Access-Token": user.token
+          }
+        }
+      );
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
@@ -232,25 +241,38 @@ class editUser extends React.Component {
   loadUser = async () => {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.get(
-        `${utils.URL_BASE_API}/user/${this.props.match.params.id}`
-      );
-      this.setState({
-        name: user.data.name,
-        email:user.data.email,
-        description: user.data.description,
-        idTypeUser: user.data.idTypeUser,
-        isLoading: false
-      });
+      const resp = await axios
+        .get(
+          `${utils.URL_BASE_API}/funcionarios/${this.props.match.params.id}`,
+          {
+            headers: {
+              "X-Access-Token": user.token
+            }
+          }
+        )
+        .then(res => {
+          this.setState({
+            name: res.data.nome,
+            email: res.data.usuario,
+            description: res.data[0].tipoUsuario.descricao,
+            idTypeUser: res.data[0].tipoUsuario.idTipo,
+            isLoading: false
+          });
+        });
     } catch (err) {
       utils.showError(err);
+      this.state.isLoading = false;
     }
   };
 
   loadTypeUser = async () => {
     try {
-      const resTypeUser = JSON.parse(sessionStorage.getItem("user"));
-      await axios.get(`${utils.URL_BASE_API}/typeuser`);
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      let resTypeUser = await axios.get(`${utils.URL_BASE_API}/tipos`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      });
       this.setState({ typeUser: resTypeUser.data });
     } catch (err) {
       utils.showError(err);
@@ -278,7 +300,7 @@ class editUser extends React.Component {
 
     const allTypeUser = this.state.typeUser
       .map(typeUser => {
-        return { label: typeUser.description, value: typeUser.id };
+        return { label: typeUser.descricao, value: typeUser.idTipo };
       })
       .map(typeUsers => ({
         value: typeUsers.value,

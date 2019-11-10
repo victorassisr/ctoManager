@@ -90,7 +90,7 @@ class Index extends React.Component {
   deleteUser = async idUser => {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.delete(`${utils.URL_BASE_API}/user/${idUser}`,{
+      await axios.delete(`${utils.URL_BASE_API}/user/${idUser}`, {
         headers: {
           "X-Access-Token": user.token
         }
@@ -104,7 +104,11 @@ class Index extends React.Component {
   loadUser = async () => {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      const res = await axios.get(`${utils.URL_BASE_API}/user`);
+      const res = await axios.get(`${utils.URL_BASE_API}/funcionarios`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      });
       this.setState({ users: res.data });
     } catch (err) {
       utils.showError(err);
@@ -160,20 +164,20 @@ class Index extends React.Component {
 
     const allUsers = currentAll.map(user => {
       return [
-        user.description,
-        user.name,
-        user.email,
+        user.tipoUsuario.descricao,
+        user.nome + " " + user.sobrenome,
+        user.usuario,
         <div>
           <Button
             value="Editar"
             color="info"
-            onClick={this.setRedirect.bind(this, `editUser/${user.id}`)}
+            onClick={this.setRedirect.bind(this, `editUser/${user.idPessoa}`)}
           >
             Editar
           </Button>
           <Button
             value="Excluir"
-            onClick={this.confirmDelete.bind(this, user.id)}
+            onClick={this.confirmDelete.bind(this, user.idPessoa)}
             color="danger"
           >
             Excluir
@@ -212,7 +216,7 @@ class Index extends React.Component {
                 <ul style={{ listStyle: "none", display: "flex" }}>
                   <li
                     className={classes.itemNumber}
-                    key={1}
+                    key={allUsers.idPessoa}
                     id={1}
                     onClick={this.handleClick}
                   >
