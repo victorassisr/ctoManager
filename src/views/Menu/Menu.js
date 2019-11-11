@@ -81,20 +81,6 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/client",
-    name: "Clientes",
-    icon: Person,
-    component: Cliente,
-    layout: "/admin"
-  },
-  {
-    path: "/spliter",
-    name: "Spliters",
-    icon: Person,
-    component: Spliter,
-    layout: "/admin"
-  },
-  {
     path: "/login",
     name: "Área de Login",
     icon: Person,
