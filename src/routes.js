@@ -16,6 +16,10 @@ import Location from "views/Location/index.jsx";
 
 import GerarRelatorio from "views/Relatorio/index.jsx";
 import Relatorio from "views/Relatorio/relatorio.jsx";
+import Bairro from "views/Bairro/index.jsx";
+import Cliente from "views/Cliente/index.jsx";
+import Spliter from "views/Spliter/index.jsx";
+import AddBairro from "views/Bairro/add.jsx";
 
 const dashboardRoutes = [
   {
@@ -67,6 +71,18 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/client",
+    name: "Clientes",
+    component: Cliente,
+    layout: "/admin"
+  },
+  {
+    path: "/spliter",
+    name: "Spliters",
+    component: Spliter,
+    layout: "/admin"
+  },
+  {
     path: "/login",
     name: "Área de Login",
     component: Login,
@@ -90,6 +106,16 @@ const dashboardRoutes = [
     component: Location,
     layout: "/admin"
   },
+  {
+  path: "/bairros",
+  component: Bairro,
+  layout: "/admin"
+  },
+  {
+    path: "/addBairro",
+    component: AddBairro,
+    layout: "/admin"
+    }
 ];
 
 export default dashboardRoutes;
