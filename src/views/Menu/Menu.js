@@ -11,7 +11,7 @@ import Location from "views/Location/index.jsx";
 import User from "views/User/index.jsx";
 import Login from "views/Login/Login.jsx";
 import Relatorio from "views/Relatorio/index.jsx";
-
+import Cliente from "views/Cliente/index.jsx";
 
 const dashboardRoutes = [
   {
@@ -44,9 +44,16 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "Usuários",
+    name: "Funcionários",
     icon: Person,
     component: User,
+    layout: "/admin"
+  },
+  {
+    path: "/client",
+    name: "Clientes",
+    icon: Person,
+    component: Cliente,
     layout: "/admin"
   },
   {
@@ -55,7 +62,7 @@ const dashboardRoutes = [
     icon: Person,
     component: Login,
     layout: "/admin"
-  },
+  }
 ];
 
 export default dashboardRoutes;

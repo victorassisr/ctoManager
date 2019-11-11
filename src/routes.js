@@ -17,6 +17,8 @@ import Location from "views/Location/index.jsx";
 import GerarRelatorio from "views/Relatorio/index.jsx";
 import Relatorio from "views/Relatorio/relatorio.jsx";
 
+import Cliente from "views/Cliente/index.jsx";
+
 const dashboardRoutes = [
   {
     path: "/home",
@@ -55,15 +57,21 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-  path: "/relatorio",
-  name: "Relatório",
-  component: Relatorio,
-  layout: "/admin"
+    path: "/relatorio",
+    name: "Relatório",
+    component: Relatorio,
+    layout: "/admin"
   },
   {
     path: "/user",
     name: "Usuários",
     component: User,
+    layout: "/admin"
+  },
+  {
+    path: "/client",
+    name: "Clientes",
+    component: Cliente,
     layout: "/admin"
   },
   {
@@ -89,7 +97,7 @@ const dashboardRoutes = [
     name: "Localizações",
     component: Location,
     layout: "/admin"
-  },
+  }
 ];
 
 export default dashboardRoutes;
