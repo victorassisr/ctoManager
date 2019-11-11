@@ -12,6 +12,7 @@ import User from "views/User/index.jsx";
 import Login from "views/Login/Login.jsx";
 import Relatorio from "views/Relatorio/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
+import Spliter from "views/Spliter/index.jsx";
 
 const dashboardRoutes = [
   {
@@ -54,6 +55,13 @@ const dashboardRoutes = [
     name: "Clientes",
     icon: Person,
     component: Cliente,
+    layout: "/admin"
+  },
+  {
+    path: "/spliter",
+    name: "Spliters",
+    icon: Person,
+    component: Spliter,
     layout: "/admin"
   },
   {

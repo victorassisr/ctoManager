@@ -18,6 +18,7 @@ import GerarRelatorio from "views/Relatorio/index.jsx";
 import Relatorio from "views/Relatorio/relatorio.jsx";
 
 import Cliente from "views/Cliente/index.jsx";
+import Spliter from "views/Spliter/index.jsx";
 
 const dashboardRoutes = [
   {
@@ -72,6 +73,12 @@ const dashboardRoutes = [
     path: "/client",
     name: "Clientes",
     component: Cliente,
+    layout: "/admin"
+  },
+  {
+    path: "/spliter",
+    name: "Spliters",
+    component: Spliter,
     layout: "/admin"
   },
   {
