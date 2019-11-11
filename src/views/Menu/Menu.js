@@ -15,6 +15,7 @@ import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
 
+
 const dashboardRoutes = [
   {
     path: "/home",
@@ -80,12 +81,26 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/client",
+    name: "Clientes",
+    icon: Person,
+    component: Cliente,
+    layout: "/admin"
+  },
+  {
+    path: "/spliter",
+    name: "Spliters",
+    icon: Person,
+    component: Spliter,
+    layout: "/admin"
+  },
+  {
     path: "/login",
     name: "Área de Login",
     icon: Person,
     component: Login,
     layout: "/admin"
-  },
+  }
 ];
 
 export default dashboardRoutes;

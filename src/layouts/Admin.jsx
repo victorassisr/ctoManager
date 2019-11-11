@@ -92,7 +92,7 @@ class Dashboard extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
-    return sessionStorage.getItem("user") ? ( //retirar esta linha para testes sem o banco
+    return JSON.parse(sessionStorage.getItem("user")) ? ( //retirar esta linha para testes sem o banco
       <div className={classes.wrapper}>
         {<Redirect to="/admin/home" />}
         <Sidebar
