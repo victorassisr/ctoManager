@@ -106,6 +106,7 @@ class Index extends React.Component {
         "X-Access-Token": user.token
       }
     });
+    this.setRedirect('home'); 
   };
 
   confirmDelete = async idPessoa => {

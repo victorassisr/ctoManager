@@ -97,7 +97,7 @@ class Index extends React.Component {
     axios.delete(`${utils.URL_BASE_API}/spliters/${idSpliter}`, {
       headers: {
         "X-Access-Token": user.token
-      }
+      }    
     });
   };
 

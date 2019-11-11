@@ -208,7 +208,7 @@ class Index extends React.Component {
               <CardBody style={{ paddingTop: 0 }}>
                 <Table
                   tableHeaderColor="info"
-                  tableHead={["Tipo de Usuário", "Nome", "Email", "Gerenciar"]}
+                  tableHead={["Tipo de Usuário", "Nome", "Usuário", "Gerenciar"]}
                   tableData={allUsers}
                 />
               </CardBody>

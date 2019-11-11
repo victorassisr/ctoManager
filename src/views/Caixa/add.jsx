@@ -360,7 +360,7 @@ class addBox extends React.Component {
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Caixa</h4>
+                <h4 className={classes.cardTitleWhite}>Cadastrar Caixa</h4>
               </CardHeader>
               <form onSubmit={this.save}>
                 <CardBody>

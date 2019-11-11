@@ -19,6 +19,7 @@ import Relatorio from "views/Relatorio/relatorio.jsx";
 import Bairro from "views/Bairro/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
+import addSpliter from "views/Spliter/addSpliter.jsx";
 import AddBairro from "views/Bairro/add.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import addTipo from "views/TipoUsuario/add.jsx";
@@ -32,13 +33,11 @@ const dashboardRoutes = [
   },
   {
     path: "/caixa",
-    name: "Caixas",
     component: Box,
     layout: "/admin"
   },
   {
     path: "/addBox",
-    name: "Cadastrar Caixas",
     component: addBox,
     layout: "/admin"
   },
@@ -56,32 +55,32 @@ const dashboardRoutes = [
   },
   {
     path: "/gerarRelatorio",
-    name: "Gerar relatório",
     component: GerarRelatorio,
     layout: "/admin"
   },
   {
     path: "/relatorio",
-    name: "Relatório",
     component: Relatorio,
     layout: "/admin"
   },
   {
     path: "/user",
-    name: "Usuários",
     component: User,
     layout: "/admin"
   },
   {
     path: "/client",
-    name: "Clientes",
     component: Cliente,
     layout: "/admin"
   },
   {
     path: "/spliter",
-    name: "Spliters",
     component: Spliter,
+    layout: "/admin"
+  },
+  {
+    path: "/addSpliter",
+    component: addSpliter,
     layout: "/admin"
   },
   {
