@@ -1,9 +1,6 @@
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import Person from "@material-ui/icons/Person";
-import LocationOn from "@material-ui/icons/LocationOn";
-import Assessment from "@material-ui/icons/Assessment";
-import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
+import {Dashboard, Person, LocationOn, Assessment, FormatListBulleted, List}
+from "@material-ui/icons";
 // core components/views for Admin layout
 import Home from "views/Home/Home.jsx";
 import Box from "views/Caixa/index.jsx";
@@ -15,6 +12,7 @@ import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
+import Instalacoes from "views/Instalacoes/index.jsx";
 
 const dashboardRoutes = [
   {
@@ -53,24 +51,17 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/tipos",
-    name: "Tipos de usuário",
-    icon: "account_circle",
-    component: TipoUsuario,
-    layout: "/admin"
-  },
-  {
-    path: "/client",
-    name: "Clientes",
-    icon: Person,
-    component: Cliente,
-    layout: "/admin"
-  },
-  {
     path: "/spliter",
     name: "Spliters",
-    icon: Person,
+    icon: List,
     component: Spliter,
+    layout: "/admin"
+  },
+  {
+    path: "/instalacoes",
+    name: "Instalações",
+    icon: "work_outline",
+    component: Instalacoes,
     layout: "/admin"
   },
   {
@@ -81,6 +72,13 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/client",
+    name: "Clientes",
+    icon: Person,
+    component: Cliente,
+    layout: "/admin"
+  },
+  {
     path: "/user",
     name: "Funcionários",
     icon: Person,
@@ -88,9 +86,16 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/tipos",
+    name: "Tipos de usuário",
+    icon: "supervised_user_circle",
+    component: TipoUsuario,
+    layout: "/admin"
+  },
+  {
     path: "/login",
     name: "Área de Login",
-    icon: Person,
+    icon: "account_circle",
     component: Login,
     layout: "/admin"
   }

@@ -171,7 +171,7 @@ class Index extends React.Component {
           </label>,
           <Button
             value="Editar"
-            color="warning"
+            color="info"
             onClick={this.setRedirect.bind(this, `editCaixa/${bairros.idBairro}`)}
           >
             Editar

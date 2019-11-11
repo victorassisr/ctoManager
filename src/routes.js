@@ -23,6 +23,8 @@ import addSpliter from "views/Spliter/addSpliter.jsx";
 import AddBairro from "views/Bairro/add.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import addTipo from "views/TipoUsuario/add.jsx";
+import Instalacoes from "views/Instalacoes/index.jsx";
+import viewInstalacao from "views/Instalacoes/view.jsx";
 
 const dashboardRoutes = [
   {
@@ -126,7 +128,18 @@ const dashboardRoutes = [
     path: "/addTipo",
     component: addTipo,
     layout: "/admin"
-  }
+  },
+  {
+    path: "/instalacoes",
+    component: Instalacoes,
+    layout: "/admin"
+  },
+  {
+    path: "/detalhesInstalacao/:id/:porta/:dataInstalacao",
+    component: viewInstalacao,
+    layout: "/admin"
+  },
+
 ];
 
 export default dashboardRoutes;
