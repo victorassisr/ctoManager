@@ -14,7 +14,7 @@ import Relatorio from "views/Relatorio/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
-
+import TipoUsuario from "views/TipoUsuario/index.jsx";
 
 const dashboardRoutes = [
   {
@@ -50,6 +50,13 @@ const dashboardRoutes = [
     name: "Relatório",
     icon: Assessment,
     component: Relatorio,
+    layout: "/admin"
+  },
+  {
+    path: "/tipos",
+    name: "Tipos de usuário",
+    icon: "account_circle",
+    component: TipoUsuario,
     layout: "/admin"
   },
   {

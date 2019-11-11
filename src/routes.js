@@ -20,6 +20,8 @@ import Bairro from "views/Bairro/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
 import AddBairro from "views/Bairro/add.jsx";
+import TipoUsuario from "views/TipoUsuario/index.jsx";
+import addTipo from "views/TipoUsuario/add.jsx";
 
 const dashboardRoutes = [
   {
@@ -115,6 +117,16 @@ const dashboardRoutes = [
   path: "/addBairro",
   component: AddBairro,
   layout: "/admin"
+  },
+  {
+    path: "/tipos",
+    component: TipoUsuario,
+    layout: "/admin"
+  },
+  {
+    path: "/addTipo",
+    component: addTipo,
+    layout: "/admin"
   }
 ];
 
