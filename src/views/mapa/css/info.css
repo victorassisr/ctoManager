@@ -1,0 +1,38 @@
+body{
+    background: #252424;
+}
+
+.id{
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: #aeff01;
+    font-size: 150%;
+    color: #333;
+}
+
+.clientes > p:first-child, .portasLivres > p:first-child, .portasUsadas > p:first-child{
+    text-align: center; 
+    font-size: 150%;
+    cursor: pointer;
+}
+
+.title{
+    background-color: #e9ff01;
+}
+
+.data{
+    background: #333;
+    color: #FFF;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.animacao{
+    animation: ease-out 1s;
+    display: none;
+}
+
+.link{
+    text-align: center;
+}

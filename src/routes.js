@@ -25,6 +25,9 @@ import TipoUsuario from "views/TipoUsuario/index.jsx";
 import addTipo from "views/TipoUsuario/add.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
 import viewInstalacao from "views/Instalacoes/view.jsx";
+import Mapas from "views/Maps/Maps.jsx";
+import Graficos from "views/Graficos/Graficos.jsx"
+import Mapa from "views/mapa/mapa.jsx";
 
 const dashboardRoutes = [
   {
@@ -63,6 +66,12 @@ const dashboardRoutes = [
   {
     path: "/relatorio",
     component: Relatorio,
+    layout: "/admin"
+  },
+  {
+    path: "/graficos",
+    name: "Gráficos",
+    component: Graficos,
     layout: "/admin"
   },
   {
@@ -132,6 +141,18 @@ const dashboardRoutes = [
   {
     path: "/instalacoes",
     component: Instalacoes,
+    layout: "/admin"
+  },
+  /*{
+    path: "/maps",
+    name: "Mapas",
+    component: Mapas,
+    layout: "/admin"
+  },*/
+  {
+    path: "/mapa",
+    name: "Mapa",
+    component: Mapa,
     layout: "/admin"
   },
   {
