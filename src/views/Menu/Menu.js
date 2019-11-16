@@ -13,6 +13,9 @@ import Spliter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
+import Mapas from "views/Maps/Maps.jsx";
+import Graficos from "views/Graficos/Graficos.jsx";
+import Mapa from "views/mapa/mapa.jsx";
 
 const dashboardRoutes = [
   {
@@ -48,6 +51,13 @@ const dashboardRoutes = [
     name: "Relatório",
     icon: Assessment,
     component: Relatorio,
+    layout: "/admin"
+  },
+  {
+    path: "/graficos",
+    name: "Gráficos",
+    icon: Assessment,
+    component: Graficos,
     layout: "/admin"
   },
   {
@@ -90,6 +100,20 @@ const dashboardRoutes = [
     name: "Tipos de usuário",
     icon: "supervised_user_circle",
     component: TipoUsuario,
+    layout: "/admin"
+  },
+  /*{
+    path: "/maps",
+    name: "Mapas",
+    icon: Dashboard,
+    component: Mapas,
+    layout: "/admin"
+  },*/
+  {
+    path: "/mapa",
+    name: "Mapa",
+    icon: Dashboard,
+    component: Mapa,
     layout: "/admin"
   },
   {
