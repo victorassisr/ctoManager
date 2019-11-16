@@ -12,19 +12,24 @@ import User from "views/User/index.jsx";
 import addUser from "views/User/add.jsx";
 import editUser from "views/User/edit.jsx";
 
+import TipoUsuario from "views/TipoUsuario/index.jsx";
+import addTipo from "views/TipoUsuario/add.jsx";
+
 import Location from "views/Location/index.jsx";
 
 import GerarRelatorio from "views/Relatorio/index.jsx";
 import Relatorio from "views/Relatorio/relatorio.jsx";
+
 import Bairro from "views/Bairro/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
 import Spliter from "views/Spliter/index.jsx";
 import addSpliter from "views/Spliter/addSpliter.jsx";
 import AddBairro from "views/Bairro/add.jsx";
-import TipoUsuario from "views/TipoUsuario/index.jsx";
-import addTipo from "views/TipoUsuario/add.jsx";
+
+
 import Instalacoes from "views/Instalacoes/index.jsx";
 import viewInstalacao from "views/Instalacoes/view.jsx";
+import addInstalacao from "views/Instalacoes/add.jsx";
 
 const dashboardRoutes = [
   {
@@ -139,6 +144,11 @@ const dashboardRoutes = [
     component: viewInstalacao,
     layout: "/admin"
   },
+  {
+    path: "/addInstalacao",
+    component: addInstalacao,
+    layout: "/admin"
+  }
 
 ];
 

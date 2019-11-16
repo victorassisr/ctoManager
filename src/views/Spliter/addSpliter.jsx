@@ -187,7 +187,7 @@ class addSpliter extends React.Component {
   };
   renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/spliters" />;
+      return <Redirect to="/admin/spliter" />;
     }
   };
 
@@ -269,7 +269,7 @@ class addSpliter extends React.Component {
                       />
                 </CardBody>
                 <CardFooter>
-                  {this.renderRedirect(this.state.lot)}
+                  {/* {this.renderRedirect(this.state.lot)} */}
                   <Button value="Cadastrar" type="submit" color="info">
                     Cadastrar
                   </Button>

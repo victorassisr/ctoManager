@@ -16,7 +16,6 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import classNames from "classnames";
-import Select from "react-select";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -170,15 +169,16 @@ function Menu(props) {
   );
 }
 
-class addUser extends React.Component {
+class addInstalacao extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      usuario: "",
-      password: "",
       redirect: false,
-      typeUser: []
+      porta: "",
+      idCaixa: "",
+      dataLiberacaoPorta: "",
+      IdPessoaFuncionario: "",
+      IdPessoaCliente: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
@@ -189,10 +189,9 @@ class addUser extends React.Component {
       redirect: true
     });
   };
-
-  renderRedirect = () => {
+  renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/home" />;
+      return <Redirect to="/admin/instalacoes" />;
     }
   };
 
@@ -211,39 +210,23 @@ class addUser extends React.Component {
     event.preventDefault();
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.post(`${utils.URL_BASE_API}/funcionario`, {
-        idTypeUser: this.state.idTypeUser.value,
-        name: this.state.name,
-        usuario: this.state.usuario,
-        password: this.state.password
+      await axios.post(`${utils.URL_BASE_API}/instalacoes`, {
+        Porta: this.state.porta,
+        dataInstalacao: this.state.dataInstalacao,
+        idCaixa: this.state.idCaixa,
+        dataLiberacaoPorta: this.state.dataLiberacaoPorta,
+        IdPessoaFuncionario: this.state.IdPessoaFuncionario,
+        IdPessoaCliente: this.state.IdPessoaCliente
+      },{
+           headers : {"X-Access-Token" : user.token}
       });
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
     }
+    console.log(this.state);
   };
-
-  loadTypeUser = async () => {
-    try {
-      const user = JSON.parse(sessionStorage.getItem("user"));
-      const res = await axios
-      .get(`${utils.URL_BASE_API}/tipos`, {
-        headers: {
-          "X-Access-Token": user.token
-        }
-      })
-      .then(res => {
-        this.setState({ typeUser: res.data });
-      });
-    } catch (err) {
-      utils.showError(err);
-    }
-  };
-
-  componentDidMount() {
-    this.loadTypeUser();
-  }
-
+  
   render() {
     const { classes } = this.props;
 
@@ -256,93 +239,127 @@ class addUser extends React.Component {
       Placeholder,
       SingleValue
     };
-
-    const allTypeUser = this.state.typeUser
-      .map(typeUser => {
-        return { label: typeUser.description, value: typeUser.id };
-      })
-      .map(typeUsers => ({
-        value: typeUsers.value,
-        label: typeUsers.label
-      }));
-
     return (
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Novo funcionário</h4>
+                <h4 className={classes.cardTitleWhite}>Registrar Instalação</h4>
               </CardHeader>
               <form onSubmit={this.save}>
                 <CardBody>
-                  <GridContainer>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
-                      <Select
-                        classes={classes}
-                        options={allTypeUser}
-                        components={components}
-                        value={this.state.idTypeUser}
-                        required={true}
-                        onChange={this.handleChange("idTypeUser")}
-                        placeholder="Tipo do Usuário"
-                        isClearable
-                      />
+                <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <TextField
+                            id="dataInstalacao"
+                            name="dataInstalacao"
+                            label="Data da Instalação:"
+                            value={this.state.dataInstalacao} onChange={this.handleChange}
+                            type="date"
+                            className={classes.textField}
+                            InputLabelProps={{
+                            shrink: true,
+                            }}
+                        />
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
+                      <GridItem xs={3} sm={3} md={3}>
                       <CustomInput
-                        labelText="Nome"
-                        id="name"
+                        labelText="Porta"
+                        id="porta"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "name",
-                          value: this.state.name,
+                          name: "porta",
+                          value: this.state.porta,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
+                      </GridItem>
+                      <GridItem xs={3} sm={3} md={3}>
                       <CustomInput
-                        labelText="Usuário"
-                        id="usuario"
+                        labelText="Caixa"
+                        id="idCaixa"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "text",
-                          name: "usuario",
-                          value: this.state.usuario,
+                          name: "idCaixa",
+                          value: this.state.idCaixa,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <CustomInput
-                        labelText="Senha"
-                        id="password"
-                        formControlProps={{
-                          fullWidth: true
+                      </GridItem>
+                      </GridContainer>
+                      <GridContainer>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <CustomInput
+                                labelText="Nome do Cliente"
+                                id="nomeCliente"
+                                formControlProps={{
+                                fullWidth: true
+                                }}
+                                inputProps={{
+                                    name: "nomeCliente",
+                                    value: this.state.nomeCliente,
+                                    onChange: this.onChange,
+                                    required: true
                         }}
-                        inputProps={{
-                          type: "password",
-                          name: "password",
-                          value: this.state.password,
-                          onChange: this.onChange,
-                          required: true
+                            />
+                        </GridItem>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <CustomInput
+                                labelText="Sobrenome do Cliente"
+                                id="SobrenomeCliente"
+                                formControlProps={{
+                                fullWidth: true
+                                }}
+                                inputProps={{
+                                    name: "sobrenomeCliente",
+                                    value: this.state.sobrenomeCliente,
+                                    onChange: this.onChange,
+                                    required: true
                         }}
-                      />
-                    </GridItem>
-                  </GridContainer>
+                            />
+                        </GridItem>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <CustomInput
+                                labelText="Nome do Funcionário"
+                                id="NomeFunc"
+                                formControlProps={{
+                                fullWidth: true
+                                }}
+                                inputProps={{
+                                    name: "NomeFunc",
+                                    value: this.state.NomeFunc,
+                                    onChange: this.onChange,
+                                    required: true
+                        }}
+                            />
+                        </GridItem>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <CustomInput
+                                labelText="Sobrenome do Funcionário"
+                                id="SobrenomeFunc"
+                                formControlProps={{
+                                fullWidth: true
+                                }}
+                                inputProps={{
+                                    name: "sobrenomeFunc",
+                                    value: this.state.sobrenomeFunc,
+                                    onChange: this.onChange,
+                                    required: true
+                        }}
+                            />
+                        </GridItem>
+                      </GridContainer>
                 </CardBody>
                 <CardFooter>
-                  {this.renderRedirect()}
-                  <Button type="submit" color="info" value="Cadastrar">
+                  {this.renderRedirect(this.state.lot)}
+                  <Button value="Cadastrar" type="submit" color="info">
                     Cadastrar
                   </Button>
                 </CardFooter>
@@ -355,4 +372,4 @@ class addUser extends React.Component {
   }
 }
 
-export default withStyles(styles)(addUser);
+export default withStyles(styles)(addInstalacao);
