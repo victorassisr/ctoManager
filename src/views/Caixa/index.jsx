@@ -185,14 +185,14 @@ class Index extends React.Component {
           <Button
             value="Ver"
             color="success"
-            onClick={this.setRedirect.bind(this, `viewCaixa/${caixa.idCaixa}`)}
+            onClick={this.setRedirect.bind(this, `viewBox/${caixa.idCaixa}`)}
           >
             Ver
           </Button>
           <Button
             value="Editar"
             color="info"
-            onClick={this.setRedirect.bind(this, `editCaixa/${caixa.idCaixa}`)}
+            onClick={this.setRedirect.bind(this, `editBox/${caixa.idCaixa}`)}
           >
             Editar
           </Button>

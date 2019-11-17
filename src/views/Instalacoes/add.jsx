@@ -294,68 +294,14 @@ class addInstalacao extends React.Component {
                       />
                       </GridItem>
                       </GridContainer>
-                      <GridContainer>
-                        <GridItem xs={3} sm={3} md={3}>
-                            <CustomInput
-                                labelText="Nome do Cliente"
-                                id="nomeCliente"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                    name: "nomeCliente",
-                                    value: this.state.nomeCliente,
-                                    onChange: this.onChange,
-                                    required: true
-                        }}
-                            />
-                        </GridItem>
-                        <GridItem xs={3} sm={3} md={3}>
-                            <CustomInput
-                                labelText="Sobrenome do Cliente"
-                                id="SobrenomeCliente"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                    name: "sobrenomeCliente",
-                                    value: this.state.sobrenomeCliente,
-                                    onChange: this.onChange,
-                                    required: true
-                        }}
-                            />
-                        </GridItem>
-                        <GridItem xs={3} sm={3} md={3}>
-                            <CustomInput
-                                labelText="Nome do Funcionário"
-                                id="NomeFunc"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                    name: "NomeFunc",
-                                    value: this.state.NomeFunc,
-                                    onChange: this.onChange,
-                                    required: true
-                        }}
-                            />
-                        </GridItem>
-                        <GridItem xs={3} sm={3} md={3}>
-                            <CustomInput
-                                labelText="Sobrenome do Funcionário"
-                                id="SobrenomeFunc"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                    name: "sobrenomeFunc",
-                                    value: this.state.sobrenomeFunc,
-                                    onChange: this.onChange,
-                                    required: true
-                        }}
-                            />
-                        </GridItem>
-                      </GridContainer>
+                      <select>
+                        {/* <option value="">Selecione</option>
+                        {
+                          this.props.dados.map(
+                          row=><option value="{row.Resposta}">{row.Resposta}</option>
+                          )
+                        } */}
+                      </select>   
                 </CardBody>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}

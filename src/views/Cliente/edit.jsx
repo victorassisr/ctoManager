@@ -14,9 +14,8 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-
-import classNames from "classnames";
 import Select from "react-select";
+import classNames from "classnames";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -170,14 +169,21 @@ function Menu(props) {
   );
 }
 
-class editClient extends React.Component {
+class editCliente extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirect: false
+      redirect: false,
+      rua: "",
+      numero: "",
+      complemento: "",
+      nome: "",
+      sobrenome: "",      
+      cliente: [],
+      district: []
     };
     this.handleChange = this.handleChange.bind(this);
-    this.edit = this.edit.bind(this);
+    this.save = this.save.bind(this);
   }
 
   setRedirect = () => {
@@ -185,10 +191,9 @@ class editClient extends React.Component {
       redirect: true
     });
   };
-
-  renderRedirect = () => {
+  renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/user" />;
+      return <Redirect to="/admin/client" />;
     }
   };
 
@@ -203,53 +208,77 @@ class editClient extends React.Component {
       [e.target.name]: e.target.value
     });
 
-  edit = async event => {
+  save = async event => {
     event.preventDefault();
-
-    const user = JSON.parse(sessionStorage.getItem("user"));
-
     try {
-      await axios.put(
-        `${utils.URL_BASE_API}/cliente/${this.props.match.params.id}`,
-        {
-          //Passar os dados a serem enviados a api
-        },
-        {
-          headers: {
-            "X-Access-Token": user.token
-          }
+      const user = JSON.parse(sessionStorage.getItem("user"));
+
+      await axios.put(`${utils.URL_BASE_API}/cliente/${this.state.cliente[0].idPessoa}`, {
+        nome : this.state.nome,
+        sobrenome : this.state.sobrenome,
+        endereco: {
+          rua : this.state.rua,
+          numero : this.state.numero,
+          complemento: this.state.complemento,
+          idBairro: this.state.idDistrict.value
         }
-      );
+      },{
+           headers : {"X-Access-Token" : user.token}
+      });
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
     }
+    console.log(this.state);
   };
-
-  loadCliente = async () => {
+  
+  loadCampos = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    const handle = this.props.match.params;
+    axios
+    .get(`${utils.URL_BASE_API}/cliente/${handle.id}`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ cliente: res.data}); 
+        this.setState(
+            { 
+              nome : this.state.cliente[0].nome,
+              sobrenome : this.state.cliente[0].sobrenome,
+              rua : this.state.cliente[0].endereco.rua,
+              numero : this.state.cliente[0].endereco.numero,
+              complemento : this.state.cliente[0].endereco.complemento,
+              idBairro: this.state.cliente[0].endereco.idBairro,
+              idDistrict: this.state.cliente[0].endereco.idBairro
+            }); 
+          console.log(this.state.cliente);
+      })      
+      .catch(err => {
+        alert(err.response);
+      });
+  };
+  loadBairros = async () => {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      const resp = await axios
-        .get(
-          `${utils.URL_BASE_API}/funcionarios/${this.props.match.params.id}`,
-          {
-            headers: {
-              "X-Access-Token": user.token
-            }
-          }
-        )
-        .then(res => {
-          this.setState({
-            cliente: res.data
-          });
-        });
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/bairros`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ district : res.data });
+      });
     } catch (err) {
       utils.showError(err);
     }
   };
 
   componentDidMount() {
-    this.loadCliente();
+    this.loadBairros();
+    this.loadCampos();
   }
 
   render() {
@@ -265,96 +294,124 @@ class editClient extends React.Component {
       SingleValue
     };
 
-    const allTypeUser = this.state.typeUser
-      .map(typeUser => {
-        return { label: typeUser.descricao, value: typeUser.idTipo };
+    const allBairros = this.state.district
+      .map(district => {
+        return { label: district.descricao, value: district.idBairro };
       })
-      .map(typeUsers => ({
-        value: typeUsers.value,
-        label: typeUsers.label
+      .map(dadosSelect => ({
+        value: dadosSelect.value,
+        label: dadosSelect.label
       }));
 
-    return (
+    return (      
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Usuário</h4>
+                <h4 className={classes.cardTitleWhite}>Editar Cliente </h4>
               </CardHeader>
-              <form onSubmit={this.edit}>
+              <form onSubmit={this.save}>
                 <CardBody>
                   <GridContainer>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
-                      {
-                        <Select
-                          classes={classes}
-                          options={bairros}
-                          components={components}
-                          defaultValue={{
-                            label: this.state.bairro,
-                            value: this.state.idBairro
-                          }}
-                          required={true}
-                          onChange={this.handleChange("idBairro")}
-                          placeholder="Bairro"
-                          isClearable
-                        />
-                      }
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
+                    <GridItem xs={6} sm={6} md={6}>
                       <CustomInput
                         labelText="Nome"
-                        id="name"
+                        id="nome"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           name: "nome",
-                          value: this.state.cliente.nome,
+                          value: this.state.nome,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      </GridItem>
+                      <GridItem xs={6} sm={6} md={6}>
+                      <CustomInput
+                        labelText="Sobrenome"
+                        id="sobrenome"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "sobrenome",
+                          value: this.state.sobrenome,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
                     </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
+                    </GridContainer> 
+                    <GridContainer>
+                    <GridItem xs={6} sm={6} md={6}>
                       <CustomInput
-                        labelText="Email"
-                        id="email"
+                        labelText="Rua"
+                        id="rua"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "email",
-                          name: "email",
-                          value: this.state.email,
+                          name: "rua",
+                          value: this.state.rua,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
+                    </GridItem>  
+                    <GridItem xs={3} sm={3} md={3}>
                       <CustomInput
-                        labelText="Senha"
-                        id="password"
+                        labelText="Número"
+                        id="numero"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "password",
-                          name: "password",
-                          value: this.state.password,
+                          name: "numero",
+                          value: this.state.numero,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      </GridItem>
+                      <GridItem xs={3} sm={3} md={3}>
+                      <CustomInput
+                        labelText="Complemento"
+                        id="complemento"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "complemento",
+                          value: this.state.complemento,
                           onChange: this.onChange
                         }}
                       />
+                      </GridItem>
+                  </GridContainer> 
+                  <GridContainer>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={12}>
+                      <Select
+                        classes={classes}
+                        options={allBairros}
+                        components={components}
+                        defaultValue={{
+                          label: this.state.descricao,
+                          value: this.state.idDistrict
+                        }}
+                        required={true}
+                        onChange={this.handleChange("idDistrict")}
+                        placeholder="Bairro"
+                        isClearable
+                      />
                     </GridItem>
-                  </GridContainer>
+                    </GridContainer>
                 </CardBody>
                 <CardFooter>
-                  {this.renderRedirect()}
-                  <Button type="submit" color="info" value="Editar">
+                  {this.renderRedirect(this.state.lot)}
+                  <Button value="Editar" type="submit" color="info">
                     Editar
                   </Button>
                 </CardFooter>
@@ -367,4 +424,4 @@ class editClient extends React.Component {
   }
 }
 
-export default withStyles(styles)(editUser);
+export default withStyles(styles)(editCliente);

@@ -269,7 +269,7 @@ class addSpliter extends React.Component {
                       />
                 </CardBody>
                 <CardFooter>
-                  {/* {this.renderRedirect(this.state.lot)} */}
+                  {this.renderRedirect(this.state.lot)}
                   <Button value="Cadastrar" type="submit" color="info">
                     Cadastrar
                   </Button>

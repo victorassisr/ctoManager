@@ -169,14 +169,13 @@ function Menu(props) {
   );
 }
 
-class editSpliter extends React.Component {
+class editBairro extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       redirect: false,
       descricao: "",
-      saidas: "",
-      spliter: {}
+      bairro: {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
@@ -189,7 +188,7 @@ class editSpliter extends React.Component {
   };
   renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/spliters" />;
+      return <Redirect to="/admin/bairros" />;
     }
   };
 
@@ -208,9 +207,8 @@ class editSpliter extends React.Component {
     event.preventDefault();
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.put(`${utils.URL_BASE_API}/spliter/${this.state.spliter.idSpliter}`, {
-        descricao : this.state.descricao,
-        saidas: this.state.saidas
+      await axios.put(`${utils.URL_BASE_API}/bairro/${this.state.bairro.idBairro}`, {
+        descricao : this.state.descricao
       },{
            headers : {"X-Access-Token" : user.token}
       });
@@ -225,18 +223,14 @@ class editSpliter extends React.Component {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const handle = this.props.match.params;
     axios
-    .get(`${utils.URL_BASE_API}/spliter/${handle.id}`, {
+    .get(`${utils.URL_BASE_API}/bairro/${handle.id}`, {
         headers: {
           "X-Access-Token": user.token
         }
       })
       .then(res => {
-        this.setState({ spliter: res.data}); 
-        this.setState(
-            { 
-                descricao: this.state.spliter.descricao,
-                saidas: this.state.spliter.saidas
-            }); 
+        this.setState({ bairro: res.data}); 
+        this.setState({ descricao: this.state.bairro.descricao}); 
       })      
       .catch(err => {
         alert(err.response);
@@ -264,7 +258,7 @@ class editSpliter extends React.Component {
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-    <h4 className={classes.cardTitleWhite}>Editar: {this.state.spliter.descricao}</h4>
+    <h4 className={classes.cardTitleWhite}>Editar bairro: {this.state.bairro.descricao}</h4>
               </CardHeader>
               <form onSubmit={this.save}>
                 <CardBody>
@@ -277,19 +271,6 @@ class editSpliter extends React.Component {
                         inputProps={{
                           name: "descricao",
                           value: this.state.descricao,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                      <CustomInput
-                        labelText="Saídas"
-                        id="saidas"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "saidas",
-                          value: this.state.saidas,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -310,4 +291,4 @@ class editSpliter extends React.Component {
   }
 }
 
-export default withStyles(styles)(editSpliter);
+export default withStyles(styles)(editBairro);

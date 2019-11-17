@@ -174,9 +174,11 @@ class addUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      nome: "",
+      sobrenome:"",
       usuario: "",
-      password: "",
+      senha: "",
+      descricao: "",
       redirect: false,
       typeUser: []
     };
@@ -212,11 +214,16 @@ class addUser extends React.Component {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
       await axios.post(`${utils.URL_BASE_API}/funcionario`, {
-        idTypeUser: this.state.idTypeUser.value,
-        name: this.state.name,
+        nome: this.state.nome,
+        sobrenome: this.state.sobrenome,
         usuario: this.state.usuario,
-        password: this.state.password
-      });
+        senha: this.state.senha,
+        tipoUsuario:{
+          idTipo: this.state.idTypeUser.value
+        }
+      },{
+        headers : {"X-Access-Token" : user.token}
+        });
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
@@ -259,7 +266,7 @@ class addUser extends React.Component {
 
     const allTypeUser = this.state.typeUser
       .map(typeUser => {
-        return { label: typeUser.description, value: typeUser.id };
+        return { label: typeUser.descricao, value: typeUser.idTipo };
       })
       .map(typeUsers => ({
         value: typeUsers.value,
@@ -277,7 +284,7 @@ class addUser extends React.Component {
               <form onSubmit={this.save}>
                 <CardBody>
                   <GridContainer>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={12}>
                       <Select
                         classes={classes}
                         options={allTypeUser}
@@ -285,20 +292,38 @@ class addUser extends React.Component {
                         value={this.state.idTypeUser}
                         required={true}
                         onChange={this.handleChange("idTypeUser")}
-                        placeholder="Tipo do Usuário"
-                        isClearable
-                      />
+                        placeholder="Tipo do Usuário"                        
+                      >
+                      <option>{this.state.descricao}</option>
+                      </Select>
                     </GridItem>
+                    </GridContainer>
+                    <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Nome"
-                        id="name"
+                        id="nome"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "name",
-                          value: this.state.name,
+                          name: "nome",
+                          value: this.state.nome,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Sobrenome"
+                        id="sobrenome"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "sobrenome",
+                          value: this.state.sobrenome,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -325,14 +350,14 @@ class addUser extends React.Component {
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Senha"
-                        id="password"
+                        id="senha"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           type: "password",
-                          name: "password",
-                          value: this.state.password,
+                          name: "senha",
+                          value: this.state.senha,
                           onChange: this.onChange,
                           required: true
                         }}

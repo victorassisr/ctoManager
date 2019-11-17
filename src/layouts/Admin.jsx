@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
         {<Redirect to="/admin/home" />}
         <Sidebar
           routes={menu}
-          logoText={"Fluxo de caixas"}
+          logoText={"CTO MANAGER"}
           logo={logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}
@@ -123,7 +123,7 @@ class Dashboard extends React.Component {
       </div>
     ) : (
       <div className={classes.wrapper}>
-        <Redirect to="/admin/Graficos" />
+        <Redirect to="/admin/Login" />
         <div ref="mainPanel">
           {this.getRoute() ? (
             <div className={classes.content}>
