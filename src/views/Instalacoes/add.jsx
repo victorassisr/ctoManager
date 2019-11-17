@@ -16,6 +16,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import classNames from "classnames";
+import Select from "react-select";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -175,10 +176,10 @@ class addInstalacao extends React.Component {
     this.state = {
       redirect: false,
       porta: "",
-      idCaixa: "",
-      dataLiberacaoPorta: "",
-      IdPessoaFuncionario: "",
-      IdPessoaCliente: ""
+      caixas: [],
+      clientes:[],
+      funcionarios: []
+      
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
@@ -213,10 +214,9 @@ class addInstalacao extends React.Component {
       await axios.post(`${utils.URL_BASE_API}/instalacoes`, {
         Porta: this.state.porta,
         dataInstalacao: this.state.dataInstalacao,
-        idCaixa: this.state.idCaixa,
-        dataLiberacaoPorta: this.state.dataLiberacaoPorta,
-        IdPessoaFuncionario: this.state.IdPessoaFuncionario,
-        IdPessoaCliente: this.state.IdPessoaCliente
+        idCaixa: this.state.idCaixa.value,
+        IdPessoaFuncionario: this.state.IdPessoaFuncionario.value,
+        IdPessoaCliente: this.state.IdPessoaCliente.value
       },{
            headers : {"X-Access-Token" : user.token}
       });
@@ -226,6 +226,63 @@ class addInstalacao extends React.Component {
     }
     console.log(this.state);
   };
+
+  loadCaixas = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/ctos`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ caixas : res.data });
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  loadClientes = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/clientes`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ clientes : res.data });
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  loadFuncionarios = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/funcionarios`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ funcionarios : res.data });
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  componentDidMount() {
+    this.loadCaixas();
+    this.loadClientes();
+    this.loadFuncionarios();
+  }
   
   render() {
     const { classes } = this.props;
@@ -239,6 +296,22 @@ class addInstalacao extends React.Component {
       Placeholder,
       SingleValue
     };
+
+    const allCaixas = this.state.caixas
+      .map(caixa => {
+        return { label: (caixa.descricao), value: caixa.idCaixa };
+      });
+
+    const allClientes = this.state.clientes
+      .map(clientes => {
+        return { label: (clientes.nome +" "+ clientes.sobrenome), value: clientes.idPessoa };
+      });
+
+      const allFuncionarios = this.state.funcionarios
+      .map(funcionarios => {
+        return { label: (funcionarios.nome +" "+ funcionarios.sobrenome), value: funcionarios.idPessoa };
+      });
+
     return (
       <div>
         <GridContainer>
@@ -278,30 +351,42 @@ class addInstalacao extends React.Component {
                         }}
                       />
                       </GridItem>
-                      <GridItem xs={3} sm={3} md={3}>
-                      <CustomInput
-                        labelText="Caixa"
-                        id="idCaixa"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "idCaixa",
-                          value: this.state.idCaixa,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                      </GridItem>
+                      <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allCaixas}
+                            components={components}
+                            value={this.state.idCaixa}
+                            required={true}
+                            onChange={this.handleChange("idCaixa")}
+                            placeholder="Caixa"                        
+                          />
+                    </GridItem>
                       </GridContainer>
-                      <select>
-                        {/* <option value="">Selecione</option>
-                        {
-                          this.props.dados.map(
-                          row=><option value="{row.Resposta}">{row.Resposta}</option>
-                          )
-                        } */}
-                      </select>   
+                      <GridContainer>
+                        <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allClientes}
+                            components={components}
+                            value={this.state.idPessoa}
+                            required={true}
+                            onChange={this.handleChange("idPessoa")}
+                            placeholder="Cliente"                        
+                          />
+                    </GridItem>
+                    <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allFuncionarios}
+                            components={components}
+                            value={this.state.idPessoa}
+                            required={true}
+                            onChange={this.handleChange("idPessoa")}
+                            placeholder="Funcionário"                        
+                          />
+                    </GridItem>
+                    </GridContainer>  
                 </CardBody>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}

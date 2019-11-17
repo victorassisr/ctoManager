@@ -85,11 +85,11 @@ class Index extends React.Component {
   handleClick(event) {
     this.setState({ currentPage: Number(event.target.dataset.id) });
   }
-  deleteInstalacao = async idCaixa => { //PK Instalacao
+  deleteInstalacao = async (idCaixa, Porta, dataInstalacao) => { 
     const user = JSON.parse(sessionStorage.getItem("user"));
     axios
-    .delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}`, {
-    //   .delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}/${porta}/${dataInstalacao}`, {
+    //.delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}`, {
+       .delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}/${Porta}/${dataInstalacao}`, {
         headers: {
           "X-Access-Token": user.token
         }
@@ -118,14 +118,14 @@ class Index extends React.Component {
         alert(err.response);
       });
   };
-  confirmDelete = async idCaixa => { // PK Instalacao
+  confirmDelete = async (idCaixa, Porta, dataInstalacao) => {
     confirmAlert({
       message: "Tem certeza que deseja deletar essa instalação?",
       buttons: [
         {
           label: "Sim",
           value: "Sim",
-          onClick: async () => this.deleteInstalacao(idCaixa)
+          onClick: async () => this.deleteInstalacao(idCaixa, Porta, dataInstalacao)
         },
         {
           label: "Não",
