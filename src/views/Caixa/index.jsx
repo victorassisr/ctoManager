@@ -49,7 +49,7 @@ const styles = {
     lineHeight: 1.42857143,
     textDecoration: "none",
     color: "#337ab7",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     borderStyle: "solid",
     border: 1,
     borderColor: "#ddd"
