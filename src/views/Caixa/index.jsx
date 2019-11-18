@@ -52,7 +52,7 @@ const styles = {
     backgroundColor: "#FFFFFF",
     borderStyle: "solid",
     border: 1,
-    borderColor: "#ddd"
+    borderColor: "#DDDDDD"
   }
 };
 
