@@ -179,6 +179,7 @@ class addBox extends React.Component {
       latitude: "",
       longitude: "",
       descricao: "",
+      portasUsadas: [],
       bairros: [],
       spliters: [],
       idBairro: "",
@@ -212,26 +213,27 @@ class addBox extends React.Component {
 
   save = async event => {
     event.preventDefault();
-
-    console.log(this.state);
-
-    try {    
+    try {
       const user = JSON.parse(sessionStorage.getItem("user"));
 
-      await axios.post(`${utils.URL_BASE_API}/cto`, {
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        descricao: this.state.descricao,
-        portasUsadas: this.state.portasUsadas,
-        bairro: {
-          idBairro: this.state.idBairro
+      await axios.post(
+        `${utils.URL_BASE_API}/cto`,
+        {
+          latitude: this.state.latitude,
+          longitude: this.state.longitude,
+          descricao: this.state.descricao,
+          portasUsadas: JSON.stringify(this.state.portasUsadas),
+          bairro: {
+            idBairro: this.state.idBairro.value
           },
-        spliter: {
-          idSpliter: this.state.idSpliter
-          } 
-      },{
-        headers : {"X-Access-Token" : user.token}
-        });
+          spliter: {
+            idSpliter: this.state.idSpliter.value
+          }
+        },
+        {
+          headers: { "X-Access-Token": user.token }
+        }
+      );
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
@@ -241,25 +243,23 @@ class addBox extends React.Component {
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
       const res = await axios
-      .get(`${utils.URL_BASE_API}/bairros`, {
-        headers: {
-          "X-Access-Token": user.token
-        }
-      })
-      .then(res => {
-        this.setState({ bairros : res.data });
-      });
+        .get(`${utils.URL_BASE_API}/bairros`, {
+          headers: {
+            "X-Access-Token": user.token
+          }
+        })
+        .then(res => {
+          this.setState({ bairros: res.data });
+        });
     } catch (err) {
       alert("Não foi encontrado nenhum bairro cadastrado.");
     }
   };
 
-
   componentDidMount() {
     this.loadBairros();
     this.loadSpliters();
   }
-
 
   loadSpliters = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -271,7 +271,7 @@ class addBox extends React.Component {
         }
       })
       .then(res => {
-        this.setState({ spliters : res.data });
+        this.setState({ spliters: res.data });
       })
       .catch(err => {
         alert("Não foi encontrado nenhum spliter cadastrado.");
@@ -300,7 +300,7 @@ class addBox extends React.Component {
         label: bairros.label
       }));
 
-      const allSpliters = this.state.spliters
+    const allSpliters = this.state.spliters
       .map(spliter => {
         return { label: spliter.descricao, value: spliter.idSpliter };
       })
@@ -366,25 +366,25 @@ class addBox extends React.Component {
                       />
                     </GridItem>
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
-                    <Select
+                      <Select
                         classes={classes}
                         options={allBairros}
                         components={components}
                         value={this.state.idBairro}
                         required={true}
                         onChange={this.handleChange("idBairro")}
-                        placeholder="Bairro"                        
+                        placeholder="Bairro"
                       />
                     </GridItem>
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
-                    <Select
+                      <Select
                         classes={classes}
                         options={allSpliters}
                         components={components}
                         value={this.state.idSpliter}
                         required={true}
                         onChange={this.handleChange("idSpliter")}
-                        placeholder="Splitter"                        
+                        placeholder="Splitter"
                       />
                     </GridItem>
                   </GridContainer>

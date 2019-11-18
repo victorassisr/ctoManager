@@ -64,7 +64,8 @@ class Index extends React.Component {
       currentPage: 1,
       allPerPage: 15,
       redirect: false,
-      page: ""
+      page: "",
+      index: 1
     };
     this.loadCaixa = this.loadCaixa.bind(this);
     this.deleteCaixa = this.deleteCaixa.bind(this);
@@ -91,13 +92,13 @@ class Index extends React.Component {
   deleteCaixa = async idCaixa => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     axios
-      .delete(`${utils.URL_BASE_API}/${idCaixa}`, {
+      .delete(`${utils.URL_BASE_API}/cto/${idCaixa}`, {
         headers: {
           "X-Access-Token": user.token
         }
       })
       .then(res => {
-        this.state.caixas = res.data;
+        this.setRedirect("admin/caixa");
       })
       .catch(err => {
         console.log(err.response);
@@ -245,8 +246,8 @@ class Index extends React.Component {
                 <ul style={{ listStyle: "none", display: "flex" }}>
                   <li
                     className={classes.itemNumber}
-                    key={1}
-                    data-id={1}
+                    key={this.state.index++}
+                    data-id={this.state.index++}
                     onClick={this.handleClick}
                   >
                     {"<<"}
