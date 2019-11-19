@@ -4,7 +4,6 @@ import axios from "axios";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 
-import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -117,13 +116,23 @@ class View extends React.Component {
               </CardHeader>
               <CardBody style={{ paddingTop: 0 }}>                
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}>
-                    <h4>
-                      <label className={classes.labelInfo}>
-                        {String(moment(this.state.instalacao.dataInstalacao).format("D/M/YYYY"))}
-                      </label>        
-                    </h4>
+                    <GridItem xs={12} sm={12} md={6} style= {{marginTop: 40}} >
+                        <label className={classes.labelInfo}>
+                          Data da Instalação:                           
+                          {String(moment(this.state.instalacao.dataInstalacao).format("DD/MM/YYYY"))}
+                        </label>  
                       </GridItem>
+                    <GridItem xs={12} sm={12} md={6} style= {{marginTop: 40}}>
+                        <label className={classes.labelInfo}>
+                          Data da liberação da Porta: 
+                          {
+                            `${this.state.instalacao.dataLiberacaoPorta == null
+                              ? " - "
+                              : String(moment(this.state.instalacao.dataLiberacaoPorta).format("DD/MM/YYYY"))
+                              }`
+                          }
+                        </label>
+                    </GridItem>
                     <GridItem xs={6} sm={6} md={6}>
                       <h4>
                         Funcionário:{" "}

@@ -37,6 +37,7 @@ import editBairro from "views/Bairro/edit.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
 import viewInstalacao from "views/Instalacoes/view.jsx";
 import addInstalacao from "views/Instalacoes/add.jsx";
+import editInstalacao from "views/Instalacoes/edit.jsx";
 
 import Mapas from "views/Maps/Maps.jsx";
 import Graficos from "views/Graficos/Graficos.jsx"
@@ -179,6 +180,11 @@ const dashboardRoutes = [
   {
     path: "/instalacoes",
     component: Instalacoes,
+    layout: "/admin"
+  },
+  {
+    path: "/editInstalacao/:id/:porta/:data",
+    component: editInstalacao,
     layout: "/admin"
   },
   /*{

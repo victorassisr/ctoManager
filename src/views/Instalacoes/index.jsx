@@ -88,7 +88,6 @@ class Index extends React.Component {
   deleteInstalacao = async (idCaixa, Porta, dataInstalacao) => { 
     const user = JSON.parse(sessionStorage.getItem("user"));
     axios
-    //.delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}`, {
        .delete(`${utils.URL_BASE_API}/instalacao/${idCaixa}/${Porta}/${dataInstalacao}`, {
         headers: {
           "X-Access-Token": user.token
@@ -101,6 +100,7 @@ class Index extends React.Component {
       .catch(err => {
         console.log(err.response);
       });
+      console.log(dataInstalacao);
   };
 
   loadInstalacoes = async () => {
@@ -168,7 +168,7 @@ class Index extends React.Component {
     });
        const allInstalacoes = currentAll.map(instalacoes => {
       return [
-        String(moment(instalacoes.dataInstalacao).format("D/M/YYYY")),     
+        String(moment(instalacoes.dataInstalacao).format("DD/MM/YYYY")),     
           <label className={classes.labelInfo}>
               {instalacoes.descricao}
           </label>,
@@ -189,13 +189,13 @@ class Index extends React.Component {
           <Button
             value="Editar"
             color="info"
-            onClick={this.setRedirect.bind(this, `editCaixa/${instalacoes.idCaixa}`)}
+            onClick={this.setRedirect.bind(this, `editInstalacao/${instalacoes.idCaixa}/${instalacoes.Porta}/${instalacoes.dataInstalacao}`)}
           >
             Editar
           </Button>
           <Button
             value="Excluir"
-            onClick={this.confirmDelete.bind(this, instalacoes.idCaixa)}
+            onClick={this.confirmDelete.bind(this, instalacoes.idCaixa, instalacoes.Porta, instalacoes.dataInstalacao )}
             color="danger"
           >
             Excluir

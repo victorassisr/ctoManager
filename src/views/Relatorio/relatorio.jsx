@@ -135,7 +135,8 @@ class Index extends React.Component {
     });
        const allInstalacoes = currentAll.map(instalacoes => {
       return [
-        String(moment(instalacoes.dataInstalacao).format("D/M/YYYY")),
+            String(moment(instalacoes.dataInstalacao).format("D/M/YYYY"))
+        ,
         <div>
                   <GridContainer>
                     <GridItem xs={6} sm={6} md={6}>
