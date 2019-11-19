@@ -143,12 +143,12 @@ const dashboardRoutes = [
     component: Instalacoes,
     layout: "/admin"
   },
-  /*{
+  {
     path: "/maps",
     name: "Mapas",
     component: Mapas,
     layout: "/admin"
-  },*/
+  },
   {
     path: "/mapa",
     name: "Mapa",
