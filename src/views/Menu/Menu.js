@@ -41,7 +41,7 @@ const dashboardRoutes = [
   },
   {
     path: "/gerarRelatorio",
-    name: "Gerar relatório por período",
+    name: "Relatório de instalações",
     icon: Assessment,
     component: Relatorio,
     layout: "/admin"
