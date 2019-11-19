@@ -12,19 +12,33 @@ import User from "views/User/index.jsx";
 import addUser from "views/User/add.jsx";
 import editUser from "views/User/edit.jsx";
 
+import TipoUsuario from "views/TipoUsuario/index.jsx";
+import addTipo from "views/TipoUsuario/add.jsx";
+import editTipo from "views/TipoUsuario/edit.jsx";
+
 import Location from "views/Location/index.jsx";
 
 import GerarRelatorio from "views/Relatorio/index.jsx";
 import Relatorio from "views/Relatorio/relatorio.jsx";
-import Bairro from "views/Bairro/index.jsx";
+
 import Cliente from "views/Cliente/index.jsx";
+import addCliente from "views/Cliente/addCliente.jsx";
+import editCliente from "views/Cliente/edit.jsx";
+
 import Spliter from "views/Spliter/index.jsx";
 import addSpliter from "views/Spliter/addSpliter.jsx";
+import editSpliter from "views/Spliter/edit.jsx";
+
+import Bairro from "views/Bairro/index.jsx";
 import AddBairro from "views/Bairro/add.jsx";
-import TipoUsuario from "views/TipoUsuario/index.jsx";
-import addTipo from "views/TipoUsuario/add.jsx";
+import editBairro from "views/Bairro/edit.jsx";
+
+
 import Instalacoes from "views/Instalacoes/index.jsx";
 import viewInstalacao from "views/Instalacoes/view.jsx";
+import addInstalacao from "views/Instalacoes/add.jsx";
+import editInstalacao from "views/Instalacoes/edit.jsx";
+
 import Mapas from "views/Maps/Maps.jsx";
 import Graficos from "views/Graficos/Graficos.jsx"
 import Mapa from "views/mapa/mapa.jsx";
@@ -85,6 +99,16 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/addClient",
+    component: addCliente,
+    layout: "/admin"
+  },
+  {
+    path: "/editClient/:id",
+    component: editCliente,
+    layout: "/admin"
+  },
+  {
     path: "/spliter",
     component: Spliter,
     layout: "/admin"
@@ -92,6 +116,11 @@ const dashboardRoutes = [
   {
     path: "/addSpliter",
     component: addSpliter,
+    layout: "/admin"
+  },
+  {
+    path: "/editSpliter/:id",
+    component: editSpliter,
     layout: "/admin"
   },
   {
@@ -129,6 +158,11 @@ const dashboardRoutes = [
   layout: "/admin"
   },
   {
+    path: "/editBairro/:id",
+    component: editBairro,
+    layout: "/admin"
+    },
+  {
     path: "/tipos",
     component: TipoUsuario,
     layout: "/admin"
@@ -139,11 +173,24 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/editTipo/:id",
+    component: editTipo,
+    layout: "/admin"
+  },
+  {
     path: "/instalacoes",
     component: Instalacoes,
     layout: "/admin"
   },
   {
+<<<<<<< HEAD
+=======
+    path: "/editInstalacao/:id/:porta/:data",
+    component: editInstalacao,
+    layout: "/admin"
+  },
+  /*{
+>>>>>>> e48931a529db98ff75102476dfb20805325bcb02
     path: "/maps",
     name: "Mapas",
     component: Mapas,
@@ -160,6 +207,11 @@ const dashboardRoutes = [
     component: viewInstalacao,
     layout: "/admin"
   },
+  {
+    path: "/addInstalacao",
+    component: addInstalacao,
+    layout: "/admin"
+  }
 
 ];
 

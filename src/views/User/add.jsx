@@ -170,13 +170,15 @@ function Menu(props) {
   );
 }
 
-class addBox extends React.Component {
+class addUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      password: "",
+      nome: "",
+      sobrenome:"",
+      usuario: "",
+      senha: "",
+      descricao: "",
       redirect: false,
       typeUser: []
     };
@@ -192,7 +194,7 @@ class addBox extends React.Component {
 
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/user" />;
+      return <Redirect to="/admin/home" />;
     }
   };
 
@@ -211,12 +213,17 @@ class addBox extends React.Component {
     event.preventDefault();
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.post(`${utils.URL_BASE_API}/user`, {
-        idTypeUser: this.state.idTypeUser.value,
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
-      });
+      await axios.post(`${utils.URL_BASE_API}/funcionario`, {
+        nome: this.state.nome,
+        sobrenome: this.state.sobrenome,
+        usuario: this.state.usuario,
+        senha: this.state.senha,
+        tipoUsuario:{
+          idTipo: this.state.idTypeUser.value
+        }
+      },{
+        headers : {"X-Access-Token" : user.token}
+        });
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
@@ -225,8 +232,16 @@ class addBox extends React.Component {
 
   loadTypeUser = async () => {
     try {
-      const res = await axios.get(`${utils.URL_BASE_API}/typeuser`);
-      this.setState({ typeUser: res.data });
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/tipos`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ typeUser: res.data });
+      });
     } catch (err) {
       utils.showError(err);
     }
@@ -251,7 +266,7 @@ class addBox extends React.Component {
 
     const allTypeUser = this.state.typeUser
       .map(typeUser => {
-        return { label: typeUser.description, value: typeUser.id };
+        return { label: typeUser.descricao, value: typeUser.idTipo };
       })
       .map(typeUsers => ({
         value: typeUsers.value,
@@ -269,7 +284,7 @@ class addBox extends React.Component {
               <form onSubmit={this.save}>
                 <CardBody>
                   <GridContainer>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={12}>
                       <Select
                         classes={classes}
                         options={allTypeUser}
@@ -277,20 +292,38 @@ class addBox extends React.Component {
                         value={this.state.idTypeUser}
                         required={true}
                         onChange={this.handleChange("idTypeUser")}
-                        placeholder="Tipo do Usuário"
-                        isClearable
-                      />
+                        placeholder="Tipo do Usuário"                        
+                      >
+                      <option>{this.state.descricao}</option>
+                      </Select>
                     </GridItem>
+                    </GridContainer>
+                    <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Nome"
-                        id="name"
+                        id="nome"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "name",
-                          value: this.state.name,
+                          name: "nome",
+                          value: this.state.nome,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Sobrenome"
+                        id="sobrenome"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "sobrenome",
+                          value: this.state.sobrenome,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -300,15 +333,15 @@ class addBox extends React.Component {
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
-                        labelText="Email"
-                        id="email"
+                        labelText="Usuário"
+                        id="usuario"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "email",
-                          name: "email",
-                          value: this.state.email,
+                          type: "text",
+                          name: "usuario",
+                          value: this.state.usuario,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -317,14 +350,14 @@ class addBox extends React.Component {
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Senha"
-                        id="password"
+                        id="senha"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           type: "password",
-                          name: "password",
-                          value: this.state.password,
+                          name: "senha",
+                          value: this.state.senha,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -347,4 +380,4 @@ class addBox extends React.Component {
   }
 }
 
-export default withStyles(styles)(addBox);
+export default withStyles(styles)(addUser);

@@ -174,40 +174,21 @@ class editBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientHouse: "",
-      clientName: "",
-      lot: "",
-      number: "",
       redirect: false,
-      city: [],
-      location: [],
-      typeBox: [],
-      latitude: "",
-      longitude: "",
-      descricao: "",
+      lot: "",
+      isLoading: false,
+      caixa: {},
       bairros: [],
       spliters: [],
       idBairro: "",
-      idSpliter: "",
-      boxValue: "",
-      clientHouse: "",
-      clientName: "",
-      lot: "",
-      number: "",
-      idLocation: "",
-      idCity: "",
-      idTypeBox: [],
-      avenue: "",
-      street: "",
-      position: "",
-      casa: "",
-      isLoading: false,
-      city: [],
-      location: [],
-      typeBox: []
+      idSpliter: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.edit = this.edit.bind(this);
+    this.loadBox = this.loadBox.bind(this);
+    this.getBairros = this.getBairros.bind(this);
+    this.getSpliters = this.getSpliters.bind(this);
+    this.getUserLogged = this.getUserLogged.bind(this);
   }
 
   setRedirect = () => {
@@ -235,107 +216,74 @@ class editBox extends React.Component {
 
   edit = async event => {
     event.preventDefault();
+    const handle = this.props.match.params;
+    this.getUserLogged();
 
-    try {
-      const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.put(`${utils.URL_BASE_API}/ctos`, {
-        idBox: this.props.match.params.id,
-        idLocation:
-          typeof this.state.idLocation.value == "undefined"
-            ? this.state.idLocation
-            : this.state.idLocation.value,
-        lot: this.state.lot,
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        descricao: this.state.descricaoS,
-        bairros: this.state.bairros,
-        spliters: this.state.spliters,
-        idBairro: 
-          typeof this.state.idBairro.value == "undefined"
-          ? this.state.idBairro
-          : this.state.idBairro.value,
-        number: this.state.number,
-        clientName: this.state.clientName,
-        clientHouse: this.state.clientHouse,
-        idCity:
-          typeof this.state.idCity.value == "undefined"
-            ? this.state.idCity
-            : this.state.idCity.value,
-        idTypeBox:
-          typeof this.state.idTypeBox[0].value == "undefined"
-            ? this.state.idTypeBox.map(type => <type className="idTypeBox" />)
-            : this.state.idTypeBox.map(type => type.value)
-      });
-      this.setRedirect();
-    } catch (err) {
-      utils.showError(err);
-    }
+    //Editar caixa....
   };
+
+  //Metodo que pega o usuário da session;
+  //Nela vc tem disponível o token para as requisições da api.
+  //Basta chamar: this.getUserLogged().token
+  getUserLogged() {
+    let user = JSON.parse(sessionStorage.getItem("user"));
+    return user;
+  }
 
   loadBox = async () => {
-    try {
-      const resBox = await axios.get(
-        `${utils.URL_BASE_API}/caixa/${this.props.match.params.id}`
-      );
-      const resType = await axios.get(
-        `${utils.URL_BASE_API}/boxTypeBox/${this.props.match.params.id}`
-      );
-      this.setState({
-        latitude: resBox.data.latitude,
-        longitude: resBox.data.longitude,
-        descricao: resBox.data.descricao,
-        bairros: resBox.data.bairros,
-        spliters: resBox.data.spliters,
-        idBairro: resBox.data.idBairro,
-        idSpliter: resBox.data.idSpliter,
-        lot: resBox.data.lot,
-        number: resBox.data.number,
-        idCity: resBox.data.idCity,
-        clientName: resBox.data.clientName,
-        idLocation: resBox.data.idLocation,
-        clientHouse: resBox.data.clientHouse,
-        boxValue: resBox.data,
-        idTypeBox: resType.data,
-        isLoading: false
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    axios
+      .get(`${utils.URL_BASE_API}/cto/${this.props.match.params.id}`, {
+        headers: {
+          "X-Access-Token": this.getUserLogged().token
+        }
+      })
+      .then(res => {
+        this.setState({
+          caixa: res.data[0]
+        });
+      })
+      .catch(err => {
+        utils.showError(err);
       });
-    } catch (err) {
-      utils.showError(err);
-    }
   };
 
-  loadCity = async () => {
-    try {
-      const res = await axios.get(`${utils.URL_BASE_API}/city`);
-      this.setState({ city: res.data });
-    } catch (err) {
-      utils.showError(err);
-    }
+  getBairros = async () => {
+    this.getUserLogged();
+    axios
+      .get(`${utils.URL_BASE_API}/bairros`, {
+        headers: {
+          "X-Access-Token": this.getUserLogged().token
+        }
+      })
+      .then(res => {
+        this.state.bairros = res.data;
+      })
+      .catch(err => {
+        utils.showError(err);
+      });
   };
 
-  loadLocation = async () => {
-    try {
-      const res = await axios.get(`${utils.URL_BASE_API}/locationFree`);
-      this.setState({ location: res.data });
-    } catch (err) {
-      utils.showError(err);
-    }
-  };
-
-  loadTypeBox = async () => {
-    try {
-      const res = await axios.get(`${utils.server}/typeBox`);
-      this.setState({ typeBox: res.data });
-    } catch (err) {
-      utils.showError(err);
-    }
+  getSpliters = async () => {
+    this.getUserLogged();
+    axios
+      .get(`${utils.URL_BASE_API}/spliters`, {
+        headers: {
+          "X-Access-Token": this.getUserLogged().token
+        }
+      })
+      .then(res => {
+        this.state.spliters = res.data;
+      })
+      .catch(err => {
+        utils.showError(err);
+      });
   };
 
   componentDidMount() {
-    this.setState({ isLoading: true });
     this.loadBox();
-    this.loadCity();
-    this.loadLocation();
-    this.loadTypeBox();
+    this.getBairros();
+    this.getSpliters();
   }
 
   render() {
@@ -351,37 +299,22 @@ class editBox extends React.Component {
       SingleValue
     };
 
-    const allCity = this.state.city
-      .map(city => {
-        return { label: city.description, value: city.id };
+    const allBairros = this.state.bairros
+      .map(bairro => {
+        return { label: bairro.descricao, value: bairro.idBairro };
       })
-      .map(cities => ({
-        value: cities.value,
-        label: cities.label
+      .map(bairros => ({
+        value: bairros.value,
+        label: bairros.label
       }));
 
-    const allLocation = this.state.location
-      .map(location => {
-        return {
-          label: `Avenida: ${location.avenue}; 
-                      Rua: ${location.street}; 
-                      Posição: ${location.position}; 
-                      casa: ${location.casa};`,
-          value: location.id
-        };
+    const allSpliters = this.state.spliters
+      .map(spliter => {
+        return { label: spliter.descricao, value: spliter.idSpliter };
       })
-      .map(locations => ({
-        value: locations.value,
-        label: locations.label
-      }));
-
-    const allTypeBox = this.state.typeBox
-      .map(typeBox => {
-        return { label: typeBox.description, value: typeBox.id };
-      })
-      .map(typesBox => ({
-        value: typesBox.value,
-        label: typesBox.label
+      .map(spliters => ({
+        value: spliters.value,
+        label: spliters.label
       }));
 
     return (
@@ -390,20 +323,21 @@ class editBox extends React.Component {
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Caixa</h4>
+                <h4 className={classes.cardTitleWhite}>Editar Caixa</h4>
               </CardHeader>
               <form onSubmit={this.edit}>
                 <CardBody>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        id="lot"
+                        labelText="Latitude"
+                        id="lat"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "lot",
-                          value: this.state.lot,
+                          name: "latitude",
+                          value: this.state.caixa.latitude,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -411,194 +345,62 @@ class editBox extends React.Component {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        id="number"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: "number",
-                          name: "number",
-                          value: this.state.number,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
-                      {this.state.isLoading && (
-                        <span>Carregando, aguarde..</span>
-                      )}
-                      {!this.state.isLoading && (
-                        <Select
-                          classes={classes}
-                          options={allLocation}
-                          defaultValue={{
-                            value: this.state.idLocation,
-                            label: `Avenida: ${this.state.boxValue.avenue}; 
-                                                    Rua: ${
-                                                      this.state.boxValue.street
-                                                    }; 
-                                                    Posição: ${
-                                                      this.state.boxValue
-                                                        .position
-                                                    }; 
-                                                    Casa: ${
-                                                      this.state.boxValue.casa
-                                                    };`
-                          }}
-                          components={components}
-                          onChange={this.handleChange("idLocation")}
-                          placeholder="Localização"
-                          isClearable
-                        />
-                      )}
-                      <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        id="bairro"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "bairro",
-                          value: this.state.bairros,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        id="latitude"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "latitude",
-                          value: this.state.latitude,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                      <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
+                        labelText="Longitude"
                         id="longitude"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           name: "longitude",
-                          value: this.state.longitude,
+                          value: this.state.caixa.longitude,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
                     </GridItem>
-                    </GridItem>
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={4}>
+                    <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
-                        id="clientName"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "clientName",
-                          value: this.state.clientName,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        id="clientHouse"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "clientHouse",
-                          value: this.state.clientHouse,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
-                      {this.state.isLoading && (
-                        <span>Carregando, aguarde..</span>
-                      )}
-                      {!this.state.isLoading && (
-                        <Select
-                          classes={classes}
-                          options={allCity}
-                          defaultValue={{
-                            label: this.state.boxValue.city,
-                            value: this.state.idCity
-                          }}
-                          components={components}
-                          onChange={this.handleChange("idCity")}
-                          placeholder="Cidade do Cliente"
-                          isClearable
-                        />
-                      )}
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer style={{ paddingTop: 10 }}>
-                    <GridItem xs={12} sm={12} md={12}>
-                      {this.state.isLoading && (
-                        <span>Carregando, aguarde..</span>
-                      )}
-                      {!this.state.isLoading && (
-                        <Select
-                          classes={classes}
-                          options={allTypeBox}
-                          defaultValue={this.state.idTypeBox.map(typesBox => ({
-                            label: typesBox.description,
-                            value: typesBox.idTypeBox
-                          }))}
-                          components={components}
-                          onChange={this.handleChange("idTypeBox")}
-                          placeholder="Adicionar Tipos de Caixa"
-                          isMulti
-                        />
-                      )}
-                      <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        id="spliters"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "spliters",
-                          value: this.state.spliters,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
-                    </GridItem>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
+                        labelText="Descricao"
                         id="descricao"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           name: "descricao",
-                          value: this.state.descricao,
+                          value: this.state.caixa.descricao,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
                     </GridItem>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
+                      <Select
+                        classes={classes}
+                        options={allBairros}
+                        components={components}
+                        value={this.state.idBairro}
+                        required={true}
+                        onChange={this.handleChange("idBairro")}
+                        placeholder="Bairro"
+                      />
+                    </GridItem>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
+                      <Select
+                        classes={classes}
+                        options={allSpliters}
+                        components={components}
+                        value={this.state.idSpliter}
+                        required={true}
+                        onChange={this.handleChange("idSpliter")}
+                        placeholder="Splitter"
+                      />
+                    </GridItem>
                   </GridContainer>
                 </CardBody>
                 <CardFooter>
-                  {this.renderRedirect()}
-                  <Button value="Editar" type="submit" color="info">
-                    Editar
+                  {this.renderRedirect(this.state.lot)}
+                  <Button value="Cadastrar" type="submit" color="info">
+                    Cadastrar
                   </Button>
                 </CardFooter>
               </form>

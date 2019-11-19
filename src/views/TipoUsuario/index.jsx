@@ -172,7 +172,7 @@ class Index extends React.Component {
           <Button
             value="Editar"
             color="warning"
-            onClick={this.setRedirect.bind(this, `editCaixa/${tipoUsuario.idTipo}`)}
+            onClick={this.setRedirect.bind(this, `editTipo/${tipoUsuario.idTipo}`)}
           >
             Editar
           </Button>,

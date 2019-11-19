@@ -43,26 +43,33 @@ class viewBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      caixa: "",
-      typeBox: []
+      caixa: {}
     };
     this.newTab = this.newTab.bind(this);
   }
 
-  loadBox = async () => {
-    try {
-      const resBox = await axios.get(
-        `${utils.server}/caixaLot/${this.props.match.params.id}`
-      );
-      const resType = await axios.get(
-        `${utils.server}/caixaTypeBox/${resBox.data.idBox}`
-      );
-
-      this.setState({ caixa: resBox.data, typeBox: resType.data });
-    } catch (err) {
-      utils.showError(err);
-    }
+  loadCaixa = async () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    const handle = this.props.match.params;
+    console.log("Ahndle: ", handle);
+    axios
+      .get(`${utils.URL_BASE_API}/cto/${handle.idCaixa}`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ caixas: res.data });
+      })
+      .catch(err => {
+        if (err.response.data.error.message) {
+          alert(err.response.data.error.message);
+        } else {
+          alert("Erro ao carregar os dados.");
+        }
+      });
   };
+
   newTab = async () => {
     window.open(
       `${utils.ip}/admin/qrCode/${this.state.caixa.lot}`,

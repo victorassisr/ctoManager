@@ -175,8 +175,9 @@ class editUser extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
-      name: "",
-      email: "",
+      nome: "",
+      sobrenome: "",
+      usuario: "",
       password: "",
       description: "",
       redirect: false,
@@ -216,15 +217,18 @@ class editUser extends React.Component {
 
     try {
       await axios.put(
-        `${utils.URL_BASE_API}/funcionarios/${this.props.match.params.id}`,
+        `${utils.URL_BASE_API}/usuarios/${this.props.match.params.id}`,
         {
-          idTypeUser:
+          nome: this.state.nome,
+          sobrenome: this.state.sobrenome,
+          usuario: this.state.usuario,
+          senha: this.state.senha,
+          tipoUsuario: {
+            idTipo: 
             typeof this.state.idTypeUser.value == "undefined"
               ? this.state.idTypeUser
-              : this.state.idTypeUser.value,
-          nome: this.state.name,
-          usuario: this.state.email,
-          senha: this.state.password
+              : this.state.idTypeUser.value
+          }
         },
         {
           headers: {
@@ -243,7 +247,7 @@ class editUser extends React.Component {
       const user = JSON.parse(sessionStorage.getItem("user"));
       const resp = await axios
         .get(
-          `${utils.URL_BASE_API}/funcionarios/${this.props.match.params.id}`,
+          `${utils.URL_BASE_API}/funcionario/${this.props.match.params.id}`,
           {
             headers: {
               "X-Access-Token": user.token
@@ -251,14 +255,17 @@ class editUser extends React.Component {
           }
         )
         .then(res => {
-          this.setState({
-            name: res.data.nome,
-            email: res.data.usuario,
+          this.setState({ func: res.data}); 
+          this.setState({ 
+            nome: this.state.func[0].nome,
+            sobrenome: this.state.func[0].sobrenome,
+            usuario: this.state.func[0].usuario,
             description: res.data[0].tipoUsuario.descricao,
             idTypeUser: res.data[0].tipoUsuario.idTipo,
             isLoading: false
           });
         });
+        
     } catch (err) {
       utils.showError(err);
       this.state.isLoading = false;
@@ -318,7 +325,7 @@ class editUser extends React.Component {
               <form onSubmit={this.edit}>
                 <CardBody>
                   <GridContainer>
-                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={6}>
+                    <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={12}>
                       {this.state.isLoading && (
                         <span>Carregando, aguarde..</span>
                       )}
@@ -338,34 +345,51 @@ class editUser extends React.Component {
                         />
                       )}
                     </GridItem>
+                    </GridContainer>
+                    <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Nome"
-                        id="name"
+                        id="nome"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "name",
-                          value: this.state.name,
+                          name: "nome",
+                          value: this.state.nome,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Sobrenome"
+                        id="sobrenome"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "sobrenome",
+                          value: this.state.sobrenome,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
                     </GridItem>
-                  </GridContainer>
+                    </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
-                        labelText="Email"
-                        id="email"
+                        labelText="Usuário"
+                        id="usuario"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          type: "email",
-                          name: "email",
-                          value: this.state.email,
+                          type: "usuario",
+                          name: "usuario",
+                          value: this.state.usuario,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -380,8 +404,8 @@ class editUser extends React.Component {
                         }}
                         inputProps={{
                           type: "password",
-                          name: "password",
-                          value: this.state.password,
+                          name: "senha",
+                          value: this.state.senha,
                           onChange: this.onChange
                         }}
                       />

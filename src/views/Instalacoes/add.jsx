@@ -16,6 +16,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import classNames from "classnames";
+import Select from "react-select";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -169,14 +170,16 @@ function Menu(props) {
   );
 }
 
-class editSpliter extends React.Component {
+class addInstalacao extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       redirect: false,
-      descricao: "",
-      saidas: "",
-      spliter: {}
+      porta: "",
+      caixas: [],
+      clientes:[],
+      funcionarios: []
+      
     };
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
@@ -189,7 +192,7 @@ class editSpliter extends React.Component {
   };
   renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/spliters" />;
+      return <Redirect to="/admin/instalacoes" />;
     }
   };
 
@@ -208,44 +211,80 @@ class editSpliter extends React.Component {
     event.preventDefault();
     try {
       const user = JSON.parse(sessionStorage.getItem("user"));
-      await axios.put(`${utils.URL_BASE_API}/spliter/${this.state.spliter.idSpliter}`, {
-        descricao : this.state.descricao,
-        saidas: this.state.saidas
+      await axios.post(`${utils.URL_BASE_API}/instalacoes`, {
+        porta: this.state.porta,
+        dataInstalacao: this.state.installDate,
+        dataLiberacaoPorta: null,
+        idCaixa: this.state.idCaixa.value,
+        idPessoaFuncionario: this.state.idPessoaFuncionario.value,
+        idPessoaCliente: this.state.idPessoaCliente.value
       },{
            headers : {"X-Access-Token" : user.token}
       });
       this.setRedirect();
     } catch (err) {
       utils.showError(err);
-    }
+    } 
     console.log(this.state);
   };
-  
-  loadCampos = async () => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    const handle = this.props.match.params;
-    axios
-    .get(`${utils.URL_BASE_API}/spliter/${handle.id}`, {
+
+  loadCaixas = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/ctos`, {
         headers: {
           "X-Access-Token": user.token
         }
       })
       .then(res => {
-        this.setState({ spliter: res.data}); 
-        this.setState(
-            { 
-                descricao: this.state.spliter.descricao,
-                saidas: this.state.spliter.saidas
-            }); 
-      })      
-      .catch(err => {
-        alert(err.response);
+        this.setState({ caixas : res.data });
       });
+    } catch (err) {
+      utils.showError(err);
+    }
   };
-  componentDidMount() {
-    this.loadCampos();
-  }
 
+  loadClientes = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/clientes`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ clientes : res.data });
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  loadFuncionarios = async () => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const res = await axios
+      .get(`${utils.URL_BASE_API}/funcionarios`, {
+        headers: {
+          "X-Access-Token": user.token
+        }
+      })
+      .then(res => {
+        this.setState({ funcionarios : res.data });
+      });
+    } catch (err) {
+      utils.showError(err);
+    }
+  };
+
+  componentDidMount() {
+    this.loadCaixas();
+    this.loadClientes();
+    this.loadFuncionarios();
+  }
+  
   render() {
     const { classes } = this.props;
 
@@ -258,47 +297,105 @@ class editSpliter extends React.Component {
       Placeholder,
       SingleValue
     };
+
+    const allCaixas = this.state.caixas
+      .map(caixa => {
+        return { label: (caixa.descricao), value: caixa.idCaixa };
+      });
+
+    const allClientes = this.state.clientes
+      .map(clientes => {
+        return { label: (clientes.nome +" "+ clientes.sobrenome), value: clientes.idPessoa };
+      });
+
+      const allFuncionarios = this.state.funcionarios
+      .map(funcionarios => {
+        return { label: (funcionarios.nome +" "+ funcionarios.sobrenome), value: funcionarios.idPessoa };
+      });
+
     return (
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="info">
-    <h4 className={classes.cardTitleWhite}>Editar: {this.state.spliter.descricao}</h4>
+                <h4 className={classes.cardTitleWhite}>Registrar Instalação</h4>
               </CardHeader>
               <form onSubmit={this.save}>
                 <CardBody>
+                <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <TextField
+                            id="dataInstalacao"
+                            name="dataInstalacao"
+                            label="Data da Instalação:"
+                            type="date"                            
+                            onChange={(event) => this.setState({installDate: event.target.value})}
+
+                            className={classes.textField}
+                            InputLabelProps={{
+                              value: this.state.dataInstalacao,
+                              shrink: true,
+                              required: true
+                            }}
+                        />
+                    </GridItem>
+                      <GridItem xs={3} sm={3} md={3}>
                       <CustomInput
-                        labelText="Descrição"
-                        id="descricao"
+                        labelText="Porta"
+                        id="porta"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          name: "descricao",
-                          value: this.state.descricao,
+                          name: "porta",
+                          value: this.state.porta,
                           onChange: this.onChange,
                           required: true
                         }}
                       />
-                      <CustomInput
-                        labelText="Saídas"
-                        id="saidas"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          name: "saidas",
-                          value: this.state.saidas,
-                          onChange: this.onChange,
-                          required: true
-                        }}
-                      />
+                      </GridItem>
+                      <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allCaixas}
+                            components={components}
+                            value={this.state.idCaixa}
+                            required={true}
+                            onChange={this.handleChange("idCaixa")}
+                            placeholder="Caixa"                        
+                          />
+                    </GridItem>
+                      </GridContainer>
+                      <GridContainer>
+                        <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allClientes}
+                            components={components}
+                            value={this.state.idPessoaCliente}
+                            required={true}
+                            onChange={this.handleChange("idPessoaCliente")}
+                            placeholder="Cliente"                        
+                          />
+                    </GridItem>
+                    <GridItem style={{ marginTop: 22 }} xs={6} sm={6} md={6}>
+                          <Select
+                            classes={classes}
+                            options={allFuncionarios}
+                            components={components}
+                            value={this.state.idPessoaFuncionario}
+                            required={true}
+                            onChange={this.handleChange("idPessoaFuncionario")}
+                            placeholder="Funcionário"                        
+                          />
+                    </GridItem>
+                    </GridContainer>  
                 </CardBody>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}
-                  <Button value="Editar" type="submit" color="info">
-                    Editar
+                  <Button value="Cadastrar" type="submit" color="info">
+                    Cadastrar
                   </Button>
                 </CardFooter>
               </form>
@@ -310,4 +407,4 @@ class editSpliter extends React.Component {
   }
 }
 
-export default withStyles(styles)(editSpliter);
+export default withStyles(styles)(addInstalacao);
