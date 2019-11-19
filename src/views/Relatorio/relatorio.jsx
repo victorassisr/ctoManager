@@ -89,8 +89,11 @@ class Index extends React.Component {
 
   loadInstalacoes = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
+    const handle = this.props.match.params;
+    console.log(this.props);
     axios
-      .get(`${utils.URL_BASE_API}/instalacoes/periodo/20191025/20191030`, {
+      //.get(`${utils.URL_BASE_API}/instalacoes/periodo/2019-10-25/2019-10-30`, {
+        .get(`${utils.URL_BASE_API}/instalacoes/periodo/${handle.dateInicio}/${handle.dateFim}`, {
         headers: {
           "X-Access-Token": user.token
         }

@@ -72,6 +72,7 @@ class Index extends React.Component {
     this.renderRedirect = this.renderRedirect.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.save = this.save.bind(this);
   }
 
   handleChange(event) {
@@ -85,16 +86,21 @@ class Index extends React.Component {
     event.preventDefault();
   }
 
-  setRedirect = page => {
+  setRedirect = () => {
     this.setState({
-      redirect: true,
-      page: page
+      redirect: true
     });
   };
-  renderRedirect = () => {
+
+  renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to={`/admin/${this.state.page}`} />;
+      return <Redirect to={`/admin/relatorio/${this.state.dateInicio}/${this.state.dateFim}`} />;
     }
+  };
+
+  save = async event => {
+    event.preventDefault();
+    this.setRedirect.bind(`relatorio/${this.state.dateInicio}/${this.state.dateFim}`);
   };
 
   render() {
@@ -108,41 +114,51 @@ class Index extends React.Component {
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>Gerar relatório de instalações</h4>
               </CardHeader>
-              <form onSubmit={this.handlerSubmit}>
+              <form onSubmit={this.save}>
       
                 <CardBody>
                   <GridContainer style={{ paddingTop: 10 }}>
-                    <GridItem xs={6} sm={6} md={6}>
-                        <TextField
-                            id="dataInicial"
-                            name="dataInicial"
-                            label="Data Inicial:"
-                            value={this.state.dataInicial} onChange={this.handleChange}
-                            type="date"
+                  <GridItem xs={12} sm={12} md={12}>
+                    <TextField
+                            id="dataInicio"
+                            name="dataInicio"
+                            label="Data Inicio:"
+                            type="date"                            
+                            onChange={(event) => this.setState({dateInicio: event.target.value})}
+
                             className={classes.textField}
-                            InputLabelProps={{
-                            shrink: true,
+                            InputLabelProps={{                              
+                              shrink: true,
+                              required: true
                             }}
                         />
                     </GridItem>
-                    <GridItem xs={6} sm={6} md={6}>
-                        <TextField
-                            id="dataFinal"
-                            name="dataFinal"
-                            label="Data Final:"
-                            value={this.state.dataFinal} onChange={this.handleChange}
-                            type="date"
+                    <GridItem xs={12} sm={12} md={12}>
+                    <TextField
+                            id="dataFim"
+                            name="dataFim"
+                            label="Data Fim:"
+                            type="date"                            
+                            onChange={(event) => this.setState({dateFim: event.target.value})}
+
                             className={classes.textField}
-                            InputLabelProps={{
-                            shrink: true,
+                            InputLabelProps={{                              
+                              shrink: true,
+                              required: true
                             }}
                         />
                     </GridItem>
                   </GridContainer>
                 </CardBody>
                 <CardFooter>
-                  <Button value="Gerar" type="submit" color="info">
-                  Gerar Relatório
+                {this.renderRedirect(this.state.lot)}
+                  <Button
+                    value="Enviar"
+                    color="info"
+                    onClick={this.setRedirect 
+                    .bind(this, `relatorio/${this.state.dateInicio}/${this.state.dateFim}`)}
+                    >
+                    Gerar relatório
                   </Button>
                 </CardFooter>
               </form>

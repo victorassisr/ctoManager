@@ -234,7 +234,7 @@ class Index extends React.Component {
                     "#",
                     "Descrição",
                     "Bairro",
-                    "Spliter",
+                    "Splitter",
                     "Latitude",
                     "Longitude",
                     "Gerenciar"

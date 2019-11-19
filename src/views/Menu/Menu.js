@@ -9,7 +9,7 @@ import User from "views/User/index.jsx";
 import Login from "views/Login/Login.jsx";
 import Relatorio from "views/Relatorio/index.jsx";
 import Cliente from "views/Cliente/index.jsx";
-import Spliter from "views/Spliter/index.jsx";
+import Splitter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
@@ -47,13 +47,6 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/relatorio",
-    name: "Relatório",
-    icon: Assessment,
-    component: Relatorio,
-    layout: "/admin"
-  },
-  {
     path: "/graficos",
     name: "Gráficos",
     icon: Assessment,
@@ -61,10 +54,10 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/spliter",
-    name: "Spliters",
+    path: "/splitter",
+    name: "Splitters",
     icon: List,
-    component: Spliter,
+    component: Splitter,
     layout: "/admin"
   },
   {
