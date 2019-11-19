@@ -123,7 +123,11 @@ class Dashboard extends React.Component {
       </div>
     ) : (
       <div className={classes.wrapper}>
+<<<<<<< HEAD
+        <Redirect to="/admin/mapa" />
+=======
         <Redirect to="/admin/Login" />
+>>>>>>> e48931a529db98ff75102476dfb20805325bcb02
         <div ref="mainPanel">
           {this.getRoute() ? (
             <div className={classes.content}>

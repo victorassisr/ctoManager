@@ -183,16 +183,19 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+<<<<<<< HEAD
+=======
     path: "/editInstalacao/:id/:porta/:data",
     component: editInstalacao,
     layout: "/admin"
   },
   /*{
+>>>>>>> e48931a529db98ff75102476dfb20805325bcb02
     path: "/maps",
     name: "Mapas",
     component: Mapas,
     layout: "/admin"
-  },*/
+  },
   {
     path: "/mapa",
     name: "Mapa",

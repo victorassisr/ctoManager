@@ -95,13 +95,13 @@ const dashboardRoutes = [
     component: TipoUsuario,
     layout: "/admin"
   },
-  /*{
+  {
     path: "/maps",
     name: "Mapas",
     icon: Dashboard,
     component: Mapas,
     layout: "/admin"
-  },*/
+  },
   {
     path: "/mapa",
     name: "Mapa",
