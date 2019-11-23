@@ -220,17 +220,28 @@ class editBox extends React.Component {
   edit = async event => {
     event.preventDefault();
     const handle = this.props.match.params;
-    this.getUserLogged();
+    console.log(this.state.idSpliter);
     axios
-      .put(`${utils.URL_BASE_API}/cto/${handle.id}`, {
-        headers: {
-          "X-Access-Token": this.getUserLogged().token
+      .put(
+        `${utils.URL_BASE_API}/cto/${handle.id}`,
+        {
+          latitude: this.state.latitude,
+          longitude: this.state.longitude,
+          descricao: this.state.descricao,
+          bairro: { idBairro: this.state.idBairro.value },
+          spliter: { idSpliter: this.state.idSpliter.value }
+        },
+        {
+          headers: {
+            "X-Access-Token": this.getUserLogged().token
+          }
         }
-      })
+      )
       .then(res => {
         alert("Editado com sucesso!");
       })
       .catch(err => {
+        console.log(err);
         alert("Erro ao editar!");
       });
   };
@@ -260,7 +271,6 @@ class editBox extends React.Component {
           idBairro: res.data[0].bairro.idBairro,
           idSpliter: res.data[0].spliter.idSpliter
         });
-        console.log(res.data[0].bairro);
       })
       .catch(err => {
         utils.showError(err);
