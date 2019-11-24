@@ -432,8 +432,8 @@ class editBox extends React.Component {
                 </CardBody>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}
-                  <Button value="Cadastrar" type="submit" color="info">
-                    Cadastrar
+                  <Button value="Editar" type="submit" color="info">
+                    Editar
                   </Button>
                 </CardFooter>
               </form>
