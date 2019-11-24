@@ -13,9 +13,8 @@ import Spliter from "views/Spliter/index.jsx";
 import Bairro from "views/Bairro/index.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
-import Mapas from "views/Maps/Maps.jsx";
 import Graficos from "views/Graficos/Graficos.jsx";
-import Mapa from "views/mapa/mapa.jsx";
+import Mapa from "views/Mapa/mapa.js";
 
 const dashboardRoutes = [
   {
@@ -103,16 +102,9 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/maps",
-    name: "Mapas",
-    icon: Dashboard,
-    component: Mapas,
-    layout: "/admin"
-  },
-  {
     path: "/mapa",
     name: "Mapa",
-    icon: Dashboard,
+    icon: LocationOn,
     component: Mapa,
     layout: "/admin"
   },
