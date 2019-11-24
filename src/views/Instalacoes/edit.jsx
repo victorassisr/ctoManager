@@ -376,7 +376,6 @@ class editInstalacao extends React.Component {
                           type="date"
                           value={this.state.dataLiberacaoPorta}
                           onChange={(event) => this.setState({dataLiberacaoPorta: event.target.value})}
-                          //onChange={this.handleChange("dataLiberacaoPorta")}
                           className={classes.textField}
                           InputLabelProps={{
                             shrink: true,

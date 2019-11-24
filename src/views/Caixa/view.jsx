@@ -1,7 +1,7 @@
 import React from "react";
 
 import axios from "axios";
-import moment from "moment";
+import { Redirect } from "react-router-dom";
 import { utils } from "../../common";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -43,23 +43,42 @@ class viewBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      caixa: {}
+      caixa: {},
+    //  caixa: []
     };
-    this.newTab = this.newTab.bind(this);
+    this.loadCaixa = this.loadCaixa.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
   }
+
+  setRedirect = async page => {
+    this.setState({
+      redirect: true,
+      page: page
+    });
+  };
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={`/admin/${this.state.page}`} />;
+    }
+  };
 
   loadCaixa = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const handle = this.props.match.params;
-    console.log("Ahndle: ", handle);
     axios
-      .get(`${utils.URL_BASE_API}/cto/${handle.idCaixa}`, {
+      .get(`${utils.URL_BASE_API}/cto/${handle.id}`, {
         headers: {
           "X-Access-Token": user.token
         }
       })
       .then(res => {
-        this.setState({ caixas: res.data });
+        this.setState({ 
+          caixa: res.data[0], 
+          bairro: res.data[0].bairro.descricao,
+          splitter: res.data[0].spliter.descricao,
+         });
+        console.log(this.state.caixa.bairro);
       })
       .catch(err => {
         if (err.response.data.error.message) {
@@ -70,27 +89,13 @@ class viewBox extends React.Component {
       });
   };
 
-  newTab = async () => {
-    window.open(
-      `${utils.ip}/admin/qrCode/${this.state.caixa.lot}`,
-      "_blank",
-      "toolbar=0,location=0,menubar=0"
-    );
-  };
-
   componentDidMount() {
-    this.loadBox();
+    this.loadCaixa();
   }
 
   render() {
     const { classes } = this.props;
-
-    const caixa = this.state.caixa;
-
-    const typesBox = this.state.typeBox.map(typeBox => {
-      return `${typeBox.description} `;
-    });
-
+        
     return (
       <div>
         <GridContainer>
@@ -104,58 +109,40 @@ class viewBox extends React.Component {
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <h4>
-                        Lote:{" "}
-                        <label className={classes.labelInfo}>{caixa.lot}</label>
+                        Latitude:{" "}
+                        <label className={classes.labelInfo}>
+                          {String(this.state.caixa.latitude)}
+                          </label>
                       </h4>
                       <h4>
-                        Numero:{" "}
+                        Longitude:{" "}
                         <label className={classes.labelInfo}>
-                          {String(caixa.number)}
+                          {String(this.state.caixa.longitude)}
                         </label>
                       </h4>
                       <h4>
-                        Adicionada por:{" "}
+                        Descrição:{" "}
                         <label className={classes.labelInfo}>
-                          {caixa.name}
+                          {this.state.caixa.descricao}
                         </label>
                       </h4>
                       <h4>
-                        Data Entrada:{" "}
+                        Portas usadas:{" "}
                         <label className={classes.labelInfo}>
-                          {moment(caixa.entryDate).format("D/M/YYYY, HH:mm")}
+                        {String(this.state.caixa.portasUsadas)}
                         </label>
                       </h4>
                       <h4>
-                        Data Saída:{" "}
+                        Bairro:{" "}
                         <label className={classes.labelInfo}>
-                          {caixa.outDate == null
-                            ? " - "
-                            : moment(caixa.outDate).format("D/M/YYYY, HH:mm")}
+                        {this.state.bairro}
                         </label>
                       </h4>
                       <h4>
-                        Localização:{" "}
-                        <label className={classes.labelInfo}>{`Avenida: ${
-                          caixa.avenue
-                        }; Rua: ${caixa.street}; Posição: ${
-                          caixa.position
-                        }; Casa: ${caixa.casa};`}</label>
-                      </h4>
-                      <h4>
-                        Nome Cliente:{" "}
+                        Spliter:{" "}
                         <label className={classes.labelInfo}>
-                          {caixa.clientName}
+                        {this.state.splitter}
                         </label>
-                      </h4>
-                      <h4>
-                        Casa do Cliente:{" "}
-                        <label className={classes.labelInfo}>
-                          {caixa.clientHouse}
-                        </label>
-                      </h4>
-                      <h4>
-                        Tipos de Caixa:{" "}
-                        <label className={classes.labelInfo}>{typesBox}</label>
                       </h4>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6} />

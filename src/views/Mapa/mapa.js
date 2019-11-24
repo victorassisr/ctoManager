@@ -1,7 +1,6 @@
 /*eslint-disable*/
 import React from "react";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -12,8 +11,6 @@ import CardBody from "components/Card/CardBody.jsx";
 
 import styles from "assets/jss/material-dashboard-react/views/iconsStyle.jsx";
 
-
-
 export default function mapeamento() {
   const classes = (styles);
   return (
@@ -22,15 +19,15 @@ export default function mapeamento() {
         <Card plain>
           <CardHeader plain color="primary">
             <h4 className={classes.cardTitleWhite}>mapeamento de Caixas</h4>
-            {/*<p className={classes.cardCategoryWhite}>
-              Handcrafted by our friends from{" "}
+            <p className={classes.cardCategoryWhite}>
+              Para acessar o conteúdo do projeto acesse{" "}
               <a
-                href="https://design.google.com/icons/?ref=creativetime"
+                href="https://github.com/victorassisr/ctoManager"
                 target="_blank"
               >
-                Google
+                GitHub
               </a>
-            </p>*/}
+            </p>
           </CardHeader>
           <CardBody>
             <Hidden only={["sm", "xs"]}>

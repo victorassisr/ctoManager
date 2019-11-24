@@ -25,9 +25,9 @@ import Cliente from "views/Cliente/index.jsx";
 import addCliente from "views/Cliente/addCliente.jsx";
 import editCliente from "views/Cliente/edit.jsx";
 
-import Spliter from "views/Spliter/index.jsx";
-import addSpliter from "views/Spliter/addSpliter.jsx";
-import editSpliter from "views/Spliter/edit.jsx";
+import Splitter from "views/Spliter/index.jsx";
+import addSplitter from "views/Spliter/addSpliter.jsx";
+import editSplitter from "views/Spliter/edit.jsx";
 
 import Bairro from "views/Bairro/index.jsx";
 import AddBairro from "views/Bairro/add.jsx";
@@ -77,7 +77,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/relatorio",
+    path: "/relatorio/:dateInicio/:dateFim",
     component: Relatorio,
     layout: "/admin"
   },
@@ -108,18 +108,18 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/spliter",
-    component: Spliter,
+    path: "/splitter",
+    component: Splitter,
     layout: "/admin"
   },
   {
-    path: "/addSpliter",
-    component: addSpliter,
+    path: "/addSplitter",
+    component: addSplitter,
     layout: "/admin"
   },
   {
-    path: "/editSpliter/:id",
-    component: editSpliter,
+    path: "/editSplitter/:id",
+    component: editSplitter,
     layout: "/admin"
   },
   {

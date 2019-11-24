@@ -1,10 +1,8 @@
-import React from "react";
 
 import axios from "axios";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
-
-import { confirmAlert } from "react-confirm-alert";
+import "./styles.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -17,8 +15,14 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import { utils } from "../../common";
+import React from "react";
 
 const styles = {
+  html: { 
+    marginTop: "0",
+    height: "100%",
+    weight: "100%"
+  },
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
     margin: "0",
@@ -55,7 +59,6 @@ const styles = {
     borderColor: "#ddd"
   }
 };
-
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -89,8 +92,10 @@ class Index extends React.Component {
 
   loadInstalacoes = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
+    const handle = this.props.match.params;
+    console.log(this.props);
     axios
-      .get(`${utils.URL_BASE_API}/instalacoes/periodo/20191025/20191030`, {
+        .get(`${utils.URL_BASE_API}/instalacoes/periodo/${handle.dateInicio}/${handle.dateFim}`, {
         headers: {
           "X-Access-Token": user.token
         }
@@ -102,6 +107,13 @@ class Index extends React.Component {
         alert(err.response);
       });
   };
+
+  gerarPDF() {  
+    var printContents = document.getElementById("exportToPDF").innerHTML;
+     document.body.innerHTML = printContents;
+     window.print();  
+  }
+  
   componentDidMount() {
     this.loadInstalacoes();
   }
@@ -113,6 +125,7 @@ class Index extends React.Component {
     const indexOfFirstAll = indexOfLastAll - this.state.allPerPage;
     const currentAll = this.state.instalacoes.slice(indexOfFirstAll, indexOfLastAll);
     const pageNumbers = [];
+
     for (
       let i = 1;
       i <= Math.ceil(this.state.instalacoes.length / this.state.allPerPage);
@@ -135,7 +148,7 @@ class Index extends React.Component {
     });
        const allInstalacoes = currentAll.map(instalacoes => {
       return [
-            String(moment(instalacoes.dataInstalacao).format("D/M/YYYY"))
+            String(moment(instalacoes.dataInstalacao).format("DD/M/YYYY"))
         ,
         <div>
                   <GridContainer>
@@ -190,11 +203,11 @@ class Index extends React.Component {
         </div>
       ];
     });
- 
+
     return (
-      <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
+          <div id="exportToPDF">
             <Card>
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>Relatório de Instalações</h4>
@@ -208,8 +221,15 @@ class Index extends React.Component {
                   ]}
                   tableData={allInstalacoes}
                 />
-              </CardBody>
-              <div>
+              </CardBody>             
+            </Card>
+            </div> 
+            <div>
+            <Button color="info" onClick={this.gerarPDF}>
+                  Gerar relatório em PDF
+                </Button>
+            </div>
+            <div>
                 <ul style={{ listStyle: "none", display: "flex" }}>
                   <li
                     className={classes.itemNumber}
@@ -234,12 +254,9 @@ class Index extends React.Component {
                   </li>
                 </ul>
               </div>
-            </Card>
           </GridItem>
         </GridContainer>
-      </div>
     );
   }
 }
-
 export default withStyles(styles)(Index);

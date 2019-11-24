@@ -181,7 +181,10 @@ class editBox extends React.Component {
       bairros: [],
       spliters: [],
       idBairro: "",
-      idSpliter: ""
+      idSpliter: "",
+      descricao: "",
+      latitude: "",
+      longitude: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.edit = this.edit.bind(this);
@@ -217,9 +220,30 @@ class editBox extends React.Component {
   edit = async event => {
     event.preventDefault();
     const handle = this.props.match.params;
-    this.getUserLogged();
-
-    //Editar caixa....
+    console.log(this.state.idSpliter);
+    axios
+      .put(
+        `${utils.URL_BASE_API}/cto/${handle.id}`,
+        {
+          latitude: this.state.latitude,
+          longitude: this.state.longitude,
+          descricao: this.state.descricao,
+          bairro: { idBairro: this.state.idBairro.value },
+          spliter: { idSpliter: this.state.idSpliter.value }
+        },
+        {
+          headers: {
+            "X-Access-Token": this.getUserLogged().token
+          }
+        }
+      )
+      .then(res => {
+        alert("Editado com sucesso!");
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Erro ao editar!");
+      });
   };
 
   //Metodo que pega o usuário da session;
@@ -240,7 +264,12 @@ class editBox extends React.Component {
       })
       .then(res => {
         this.setState({
-          caixa: res.data[0]
+          caixa: res.data[0],
+          latitude: res.data[0].latitude,
+          longitude: res.data[0].longitude,
+          descricao: res.data[0].descricao,
+          idBairro: res.data[0].bairro.idBairro,
+          idSpliter: res.data[0].spliter.idSpliter
         });
       })
       .catch(err => {
@@ -299,23 +328,27 @@ class editBox extends React.Component {
       SingleValue
     };
 
-    const allBairros = this.state.bairros
-      .map(bairro => {
-        return { label: bairro.descricao, value: bairro.idBairro };
-      })
-      .map(bairros => ({
+    const allBairros = this.state.bairros.map(bairro => {
+      return {
+        label: bairro.descricao,
+        value: bairro.idBairro
+      };
+    });
+    /*.map(bairros => ({
         value: bairros.value,
         label: bairros.label
-      }));
+      }));*/
 
-    const allSpliters = this.state.spliters
-      .map(spliter => {
-        return { label: spliter.descricao, value: spliter.idSpliter };
-      })
-      .map(spliters => ({
+    const allSpliters = this.state.spliters.map(spliter => {
+      return {
+        label: spliter.descricao,
+        value: spliter.idSpliter
+      };
+    });
+    /*.map(spliters => ({
         value: spliters.value,
         label: spliters.label
-      }));
+      }));*/
 
     return (
       <div>
@@ -337,7 +370,7 @@ class editBox extends React.Component {
                         }}
                         inputProps={{
                           name: "latitude",
-                          value: this.state.caixa.latitude,
+                          value: this.state.latitude,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -352,7 +385,7 @@ class editBox extends React.Component {
                         }}
                         inputProps={{
                           name: "longitude",
-                          value: this.state.caixa.longitude,
+                          value: this.state.longitude,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -367,7 +400,7 @@ class editBox extends React.Component {
                         }}
                         inputProps={{
                           name: "descricao",
-                          value: this.state.caixa.descricao,
+                          value: this.state.descricao,
                           onChange: this.onChange,
                           required: true
                         }}
@@ -399,8 +432,8 @@ class editBox extends React.Component {
                 </CardBody>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}
-                  <Button value="Cadastrar" type="submit" color="info">
-                    Cadastrar
+                  <Button value="Editar" type="submit" color="info">
+                    Editar
                   </Button>
                 </CardFooter>
               </form>
