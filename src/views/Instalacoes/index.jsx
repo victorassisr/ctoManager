@@ -225,7 +225,7 @@ class Index extends React.Component {
                 <Table
                   tableHeaderColor="info"
                   tableHead={[
-                    "Data da instalação", "Descrição","Funcionário","Cliente", ""
+                    "Data da instalação", "Bairro","Funcionário","Cliente", ""
                   ]}
                   tableData={allInstalacoes}
                 />

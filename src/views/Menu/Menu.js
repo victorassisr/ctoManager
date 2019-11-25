@@ -40,13 +40,6 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/gerarRelatorio",
-    name: "Relatório de instalações",
-    icon: Assessment,
-    component: Relatorio,
-    layout: "/admin"
-  },
-  {
     path: "/graficos",
     name: "Gráficos",
     icon: Timeline,
@@ -54,10 +47,10 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/splitter",
-    name: "Splitters",
-    icon: List,
-    component: Splitter,
+    path: "/gerarRelatorio",
+    name: "Relatório de instalações",
+    icon: Assessment,
+    component: Relatorio,
     layout: "/admin"
   },
   {
@@ -65,6 +58,13 @@ const dashboardRoutes = [
     name: "Instalações",
     icon: "work_outline",
     component: Instalacoes,
+    layout: "/admin"
+  },
+  {
+    path: "/splitter",
+    name: "Splitters",
+    icon: List,
+    component: Splitter,
     layout: "/admin"
   },
   {

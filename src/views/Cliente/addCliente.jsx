@@ -217,7 +217,7 @@ class addCliente extends React.Component {
         nome: this.state.nome,
         sobrenome: this.state.sobrenome,
         endereco:{
-            rua: this.state.numero,
+            rua: this.state.rua,
             numero: this.state.numero,
             complemento: this.state.complemento,
             idBairro: this.state.idBairro.value
@@ -360,8 +360,7 @@ class addCliente extends React.Component {
                           type: "text",
                           name: "complemento",
                           value: this.state.complemento,
-                          onChange: this.onChange,
-                          required: true
+                          onChange: this.onChange
                         }}
                       />
                     </GridItem>
