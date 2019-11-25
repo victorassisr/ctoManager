@@ -82,8 +82,8 @@ export default function Grafico() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Novos clientes</h4>
-              <p className={classes.cardCategory}>Novos clientes por mês no ano de 2019.</p>
+              <h4 className={classes.cardTitle}>Instalações mensais</h4>
+              <p className={classes.cardCategory}>Instalações por mês no ano de 2019.</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>

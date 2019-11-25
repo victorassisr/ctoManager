@@ -40,6 +40,7 @@ import addInstalacao from "views/Instalacoes/add.jsx";
 import editInstalacao from "views/Instalacoes/edit.jsx";
 
 import Graficos from "views/Graficos/Graficos.jsx"
+import Grafico from "views/Graficos/meusGraficos.jsx"
 import Mapa from "views/Mapa/mapa.js";
 
 const dashboardRoutes = [
@@ -84,7 +85,7 @@ const dashboardRoutes = [
   {
     path: "/graficos",
     name: "Gráficos",
-    component: Graficos,
+    component: Grafico,
     layout: "/admin"
   },
   {
@@ -195,6 +196,11 @@ const dashboardRoutes = [
   {
     path: "/addInstalacao",
     component: addInstalacao,
+    layout: "/admin"
+  },
+  {
+    path: "/editInstalacao/:id/:porta/:data",
+    component: editInstalacao,
     layout: "/admin"
   }
 

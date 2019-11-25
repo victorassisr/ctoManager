@@ -14,6 +14,7 @@ import Bairro from "views/Bairro/index.jsx";
 import TipoUsuario from "views/TipoUsuario/index.jsx";
 import Instalacoes from "views/Instalacoes/index.jsx";
 import Graficos from "views/Graficos/Graficos.jsx";
+import Grafico from "views/Graficos/meusGraficos.jsx";
 import Mapa from "views/Mapa/mapa.js";
 
 const dashboardRoutes = [
@@ -49,7 +50,7 @@ const dashboardRoutes = [
     path: "/graficos",
     name: "Gráficos",
     icon: Timeline,
-    component: Graficos,
+    component: Grafico,
     layout: "/admin"
   },
   {

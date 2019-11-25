@@ -12,10 +12,10 @@ var delays2 = 80,
   durations2 = 500;
 
 // ##############################
-// // // Daily Sales
+// // // Daily 
 // #############################
 
-const dailySalesChart = {
+const dailyChart = {
   data: {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
     series: [[12, 17, 7, 17, 23, 18, 38]]
@@ -25,7 +25,7 @@ const dailySalesChart = {
       tension: 0
     }),
     low: 0,
-    high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+    high: 12, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
     chartPadding: {
       top: 0,
       right: 0,
@@ -69,7 +69,7 @@ const dailySalesChart = {
 // // // Email Subscriptions
 // #############################
 
-const emailsSubscriptionChart = {
+const monthlyChart = {
   data: {
     labels: [
       "Jan",
@@ -92,7 +92,7 @@ const emailsSubscriptionChart = {
       showGrid: false
     },
     low: 0,
-    high: 1000,
+    high: 20,
     chartPadding: {
       top: 0,
       right: 5,
@@ -184,7 +184,7 @@ const completedTasksChart = {
 };
 
 module.exports = {
-  dailySalesChart,
-  emailsSubscriptionChart,
+  dailyChart,
+  monthlyChart,
   completedTasksChart
 };
