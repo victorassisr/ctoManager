@@ -24,8 +24,9 @@ export default function mapeamento() {
               <a
                 href="https://github.com/victorassisr/ctoManager"
                 target="_blank"
-              >
+              ><b>
                 GitHub
+              </b>
               </a>
             </p>
           </CardHeader>
@@ -34,6 +35,8 @@ export default function mapeamento() {
               <iframe
                 className={classes.iframe}
                 src="https://mapeamento-caixas.netlify.com/"
+                width="1250" 
+                height="450"
                 title="Mapeamento iframe"
               >
                 <p>Your browser does not support iframes.</p>
