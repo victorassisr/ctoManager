@@ -31,72 +31,16 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import {
   dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
+  emailsSubscriptionChart
 } from "variables/charts.jsx";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 
 export default function Grafico() {
-  //const useStyles = makeStyles(styles);
   const classes = (styles);
   return (
     <div>
-      <GridContainer>
-       
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Revenue</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <DateRange />
-                Últimas 24 Horas
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
-                <Icon>info_outline</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <LocalOffer />
-                Propecções
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <Accessibility />
-              </CardIcon>
-              <p className={classes.cardCategory}>Followers</p>
-              <h3 className={classes.cardTitle}>+245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Update />
-                Updates
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart>
@@ -110,22 +54,22 @@ export default function Grafico() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Instalações diárias</h4>
+              <h4 className={classes.cardTitle} id="teste">Instalações diárias</h4>
               <p className={classes.cardCategory}>
                 <span className={classes.successText}>
                   <ArrowUpward className={classes.upArrowCardCategory} /> 55%
                 </span>{" "}
-                crescimento das instalações no dia.
+                crescimento das instalações por dia.
               </p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> atualixado 4 minutoes atrás.
+                <AccessTime /> atualizado 4 minutos atrás.
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        <GridItem xs={12} sm={12} md={8}>
           <Card chart>
             <CardHeader color="warning">
               <ChartistGraph
@@ -139,33 +83,11 @@ export default function Grafico() {
             </CardHeader>
             <CardBody>
               <h4 className={classes.cardTitle}>Novos clientes</h4>
-              <p className={classes.cardCategory}>Última Performance</p>
+              <p className={classes.cardCategory}>Novos clientes por mês no ano de 2019.</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> campanha enviada 2 dias atrás.
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Trabalhos realizados</h4>
-              <p className={classes.cardCategory}>Última Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campanha enviada 2 dias atrás.
+                <AccessTime /> atualizado 2 horas atrás.
               </div>
             </CardFooter>
           </Card>

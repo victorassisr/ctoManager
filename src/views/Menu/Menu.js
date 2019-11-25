@@ -1,5 +1,5 @@
 // @material-ui/icons
-import {Dashboard, Person, LocationOn, Assessment, FormatListBulleted, List}
+import {Dashboard, Person, LocationOn, Assessment, FormatListBulleted, List, Timeline}
 from "@material-ui/icons";
 // core components/views for Admin layout
 import Home from "views/Home/Home.jsx";
@@ -48,7 +48,7 @@ const dashboardRoutes = [
   {
     path: "/graficos",
     name: "Gráficos",
-    icon: Assessment,
+    icon: Timeline,
     component: Graficos,
     layout: "/admin"
   },
