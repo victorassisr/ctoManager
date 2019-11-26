@@ -189,7 +189,7 @@ class editSpliter extends React.Component {
   };
   renderRedirect = lot => {
     if (this.state.redirect) {
-      return <Redirect to="/admin/spliters" />;
+      return <Redirect to="/admin/splitter" />;
     }
   };
 

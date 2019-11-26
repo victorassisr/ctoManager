@@ -334,10 +334,6 @@ class editBox extends React.Component {
         value: bairro.idBairro
       };
     });
-    /*.map(bairros => ({
-        value: bairros.value,
-        label: bairros.label
-      }));*/
 
     const allSpliters = this.state.spliters.map(spliter => {
       return {
@@ -345,10 +341,6 @@ class editBox extends React.Component {
         value: spliter.idSpliter
       };
     });
-    /*.map(spliters => ({
-        value: spliters.value,
-        label: spliters.label
-      }));*/
 
     return (
       <div>

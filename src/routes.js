@@ -46,7 +46,6 @@ import Mapa from "views/Mapa/mapa.js";
 const dashboardRoutes = [
   {
     path: "/home",
-    name: "Home",
     component: Home,
     layout: "/admin"
   },

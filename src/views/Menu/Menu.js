@@ -40,13 +40,6 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/graficos",
-    name: "Gráficos",
-    icon: Timeline,
-    component: Grafico,
-    layout: "/admin"
-  },
-  {
     path: "/gerarRelatorio",
     name: "Relatório de instalações",
     icon: Assessment,

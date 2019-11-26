@@ -174,7 +174,7 @@ class Index extends React.Component {
             color="info"
             onClick={this.setRedirect.bind(
               this,
-              `editSpliter/${spliter.idSpliter}`
+              `editSplitter/${spliter.idSpliter}`
             )}
           >
             Editar
