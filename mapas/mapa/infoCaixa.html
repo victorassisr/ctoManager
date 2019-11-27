@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Informações CTOs</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/info.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+          <a class="link" href="./mapa.html" title="Voltar"> Voltar</a></Voltar>
+          <div class="id">
+              <p> Caixa: {{caixa.idCaixa}} - Bairro: {{caixa.bairro.descricao}}</p>
+          </div>
+          <!-- <div class="clientes">
+                <p class="title" @click="toggle($event.target)">Clientes</p>
+                <div>
+                    <p v-for="cliente in caixa.clientes" class="data">NOME CLIENTE</p>
+                </div>
+          </div> -->
+          <div class="mapa">
+            <div id="mapaCaixa">
+
+            </div>
+          </div>
+          <div class="portasLivres">
+            <p class="title" @click="toggle($event.target)">Portas livres:</p>
+            <div>
+                 <p class="data">{{caixa.portasUsadas}}</p> 
+            </div>
+          </div>
+          <!-- <div class="portasUsadas">
+                <p class="title" @click="toggle($event.target)">Portas usadas:</p>
+                <div>
+                    <p v-for="pu in caixa.portasUsadas" class="data">{{pu}}</p>
+                </div>
+          </div>  -->
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"
+    ></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script src="js/axios.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      let vue = new Vue({
+        el: "#app",
+        mounted() {
+          this.checkId();
+          this.getCaixas();
+          //this.findCaixaId();
+        },
+        data: {
+          urlAPI: "http://localhost/api/cto",
+          id: "",
+          caixas: {},
+          caixa: {}
+        },
+        methods: {
+          checkId() {
+            let query = window.location.search;
+            let vet = query.substring(1);
+            let after = vet.split("=");
+
+            if (after[0] && after[1]) {
+              if (after[0] == "id" && after[1]) {
+                try {
+                  let num = Number.parseInt(after[1]);
+                  if (Number.isInteger(num)) {
+                    this.id = num;
+                  } else {
+                    this.id = null;
+                    throw "O id não é valido!";
+                  }
+                } catch (err) {
+                  alert(err);
+                  location.href = "mapa.html";
+                }
+              }
+            }
+          },
+          getCaixas() {
+            axios
+              .get(this.urlAPI+'/'+this.id,{
+                headers : {
+                  'X-Access-Token' : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzQ4MTQzMDQsImlzcyI6bnVsbCwiZXhwIjoxNTc0ODE3OTA0LCJuYmYiOjE1NzQ4MTQzMDMsImRhdGEiOnsiaWRQZXNzb2EiOiIxIiwibm9tZSI6ImN1ZWlvIiwic29icmVub21lIjoid2VsbGluZ3RvbiIsInVzdWFyaW8iOiJhZG1pbiIsImlkVGlwbyI6IjEiLCJkZXNjcmljYW8iOiJhZG1pbiJ9fQ.RsbGm3mz-CSvyHkWATLqj_TUss8jdvlFT5ykCZgOzmQ'
+                }
+              })
+              .then(res => {
+                this.caixa = res.data[0];
+                console.log(this.caixa);
+                //this.findCaixaId();
+              })
+              .catch(function(erro) {
+                console.log("Erro ao buscar os dados da API.");
+              });
+          },
+          findCaixaId() {
+            for (i in this.caixas) {
+              if (this.caixas[i].id == this.id) {
+                this.caixa = this.caixas[i];
+              }
+            }
+            if (this.caixa == null) {
+              alert("O id requisitado não é válido!");
+              location.href = "mapa.html";
+            }
+          },
+          toggle(el){
+            if(el.nextElementSibling.classList.contains('animacao')){
+                el.nextElementSibling.classList.remove('animacao');
+            } else {
+                el.nextElementSibling.classList.add('animacao');
+            }
+          }
+        },
+        filters: {}
+      });
+    </script>
+  </body>
+</html>

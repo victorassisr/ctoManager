@@ -130,13 +130,16 @@ const styles = {
     
     var semana = [];
     var ano = [];
-
-    for(var i = 2; i<=7; i++){
+    if (!this.state.instalacoesWeek){
+      for(var i = 2; i<=7; i++){
         semana[i] = this.state.instalacoesWeek.find(semana => semana.diaDaSemana == [i]);
+      }
     }
 
-    for(var i = 1; i<=12; i++){
+    if (!this.state.instalacoesMonth){
+      for(var i = 1; i<=12; i++){
         ano[i] = this.state.instalacoesMonth.find(ano => ano.mes == [i]);
+      }
     }
 
     const diasChart = {

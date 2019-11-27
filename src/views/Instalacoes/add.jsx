@@ -225,7 +225,7 @@ class addInstalacao extends React.Component {
     } catch (err) {
       utils.showError(err);
     } 
-    console.log(this.state);
+    //console.log(this.state);
   };
 
   loadCaixas = async () => {

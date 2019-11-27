@@ -106,6 +106,7 @@ class Index extends React.Component {
 
   loadCaixa = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
+    console.log(user);
     axios
       .get(`${utils.URL_BASE_API}/ctos`, {
         headers: {
@@ -116,11 +117,15 @@ class Index extends React.Component {
         this.setState({ caixas: res.data });
       })
       .catch(err => {
+        console.log("ERROOOOOO");
+        console.log(err);
+        
+        /*
         if (err.response.data.error.message) {
           alert(err.response.data.error.message);
         } else {
           alert("Erro ao carregar os dados.");
-        }
+        }*/
       });
   };
 

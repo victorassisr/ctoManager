@@ -34,7 +34,7 @@ export default function mapeamento() {
             <Hidden only={["sm", "xs"]}>
               <iframe
                 className={classes.iframe}
-                src="https://mapeamento-caixas.netlify.com/"
+                src="http://localhost/mapas/mapa/mapa.html"
                 width="1250" 
                 height="450"
                 title="Mapeamento iframe"
