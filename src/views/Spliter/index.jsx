@@ -204,7 +204,7 @@ class Index extends React.Component {
                   value="Novo"
                   style={{ float: "right" }}
                   color="info"
-                  onClick={this.setRedirect.bind(this, "addSpliter")}
+                  onClick={this.setRedirect.bind(this, "addSplitter")}
                 >
                   Novo
                 </Button>
