@@ -17,7 +17,7 @@ export default function mapeamento() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="info">
             <h4 className={classes.cardTitleWhite}>mapeamento de Caixas</h4>
             <p className={classes.cardCategoryWhite}>
               Para acessar o conteúdo do projeto acesse{" "}
@@ -35,7 +35,7 @@ export default function mapeamento() {
               <iframe
                 className={classes.iframe}
                 src="http://localhost/mapas/mapa/mapa.html"
-                width="1250" 
+                width="990" 
                 height="450"
                 title="Mapeamento iframe"
               >

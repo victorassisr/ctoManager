@@ -97,7 +97,7 @@ class Index extends React.Component {
         }
       })
       .then(res => {
-        this.setRedirect("admin/caixa");
+        this.setRedirect("home");
       })
       .catch(err => {
         console.log(err.response);
@@ -186,6 +186,7 @@ class Index extends React.Component {
         caixa.spliter.descricao,
         caixa.latitude,
         caixa.longitude,
+        caixa.portasUsadas,
         <div>
           <Button
             value="Ver"
@@ -241,6 +242,7 @@ class Index extends React.Component {
                     "Splitter",
                     "Latitude",
                     "Longitude",
+                    "PortasUsadas",
                     "Gerenciar"
                   ]}
                   tableData={allCaixas}

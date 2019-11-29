@@ -1,5 +1,6 @@
 import React from "react";
 
+import Hidden from "@material-ui/core/Hidden";
 import axios from "axios";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
@@ -41,6 +42,15 @@ const styles = {
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
     textDecoration: "none"
+  },
+  iframe: {
+    width: "100%",
+    height: "500px",
+    border: "0",
+    
+  },
+  iframeContainer: {
+    margin: "0 -20px 0"
   },
   divAutocomplete: {
     paddingTop: 30
@@ -179,7 +189,7 @@ class addBox extends React.Component {
       latitude: "",
       longitude: "",
       descricao: "",
-      portasUsadas: [],
+      portasUsadas: "",
       bairros: [],
       spliters: [],
       idBairro: "",
@@ -222,7 +232,7 @@ class addBox extends React.Component {
           latitude: this.state.latitude,
           longitude: this.state.longitude,
           descricao: this.state.descricao,
-          portasUsadas: JSON.stringify(this.state.portasUsadas),
+          portasUsadas: this.state.portasUsadas,
           bairro: {
             idBairro: this.state.idBairro.value
           },
@@ -365,6 +375,22 @@ class addBox extends React.Component {
                         }}
                       />
                     </GridItem>
+                    
+                    <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="PortasUsadas"
+                        id="portasUsadas"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "portasUsadas",
+                          value: this.state.portasUsadas,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
                     <GridItem style={{ marginTop: 22 }} xs={12} sm={12} md={4}>
                       <Select
                         classes={classes}
@@ -389,6 +415,22 @@ class addBox extends React.Component {
                     </GridItem>
                   </GridContainer>
                 </CardBody>
+                <GridContainer>
+                  <GridItem xs={12} sm={20} md={12}>
+                        <CardBody>
+                          <Hidden only={["sm", "xs"]}>
+                            <iframe
+                              className={classes.iframe}
+                              src="https://www.google.com.br/maps"
+                              width="850" 
+                              height="450"
+                              title="Mapeamento iframe"
+                            >
+                            </iframe>
+                          </Hidden>
+                        </CardBody>
+                      </GridItem>
+                    </GridContainer>
                 <CardFooter>
                   {this.renderRedirect(this.state.lot)}
                   <Button value="Cadastrar" type="submit" color="info">

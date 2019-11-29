@@ -60,13 +60,13 @@ const dashboardRoutes = [
     component: Splitter,
     layout: "/admin"
   },
-  {
+  /*{
     path: "/location",
     name: "Localizações",
     icon: LocationOn,
     component: Location,
     layout: "/admin"
-  },
+  },*/
   {
     path: "/client",
     name: "Clientes",

@@ -180,6 +180,7 @@ class editBox extends React.Component {
       caixa: {},
       bairros: [],
       spliters: [],
+      portasUsadas: "",
       idBairro: "",
       idSpliter: "",
       descricao: "",
@@ -228,6 +229,7 @@ class editBox extends React.Component {
           latitude: this.state.latitude,
           longitude: this.state.longitude,
           descricao: this.state.descricao,
+          portasUsadas: this.state.portasUsadas,
           bairro: { idBairro: this.state.idBairro.value },
           spliter: { idSpliter: this.state.idSpliter.value }
         },
@@ -268,6 +270,7 @@ class editBox extends React.Component {
           latitude: res.data[0].latitude,
           longitude: res.data[0].longitude,
           descricao: res.data[0].descricao,
+          portasUsadas: res.data[0].portasUsadas,
           idBairro: res.data[0].bairro.idBairro,
           idSpliter: res.data[0].spliter.idSpliter
         });
@@ -393,6 +396,21 @@ class editBox extends React.Component {
                         inputProps={{
                           name: "descricao",
                           value: this.state.descricao,
+                          onChange: this.onChange,
+                          required: true
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="PortasUsadas"
+                        id="portasUsadas"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "portasUsadas",
+                          value: this.state.portasUsadas,
                           onChange: this.onChange,
                           required: true
                         }}

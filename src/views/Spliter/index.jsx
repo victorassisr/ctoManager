@@ -65,6 +65,7 @@ class Index extends React.Component {
       page: ""
     };
     this.handleClick = this.handleClick.bind(this);
+    this.deleteSpliter = this.deleteSpliter.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
     this.loadSpliters = this.loadSpliters.bind(this);
   }
@@ -94,11 +95,18 @@ class Index extends React.Component {
   deleteSpliter = async idSpliter => {
     const user = JSON.parse(sessionStorage.getItem("user"));
 
-    axios.delete(`${utils.URL_BASE_API}/spliters/${idSpliter}`, {
+    axios.delete(`${utils.URL_BASE_API}/spliter/${idSpliter}`, {
       headers: {
         "X-Access-Token": user.token
-      }    
-    });
+      }
+      })
+      .then(res => {
+        this.setRedirect("home");
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+    
   };
 
   confirmDelete = async idSpliter => {
@@ -125,12 +133,16 @@ class Index extends React.Component {
         }
       })
       .then(res => {
-        this.state.spliters = res.data;
+        this.setState({ spliters: res.data });
       })
       .catch(err => {
         console.log(err);
       });
   };
+
+  componentDidMount() {
+    this.loadSpliters();
+  }
 
   render() {
     const { classes } = this.props;
@@ -204,7 +216,7 @@ class Index extends React.Component {
                   value="Novo"
                   style={{ float: "right" }}
                   color="info"
-                  onClick={this.setRedirect.bind(this, "addSpliter")}
+                  onClick={this.setRedirect.bind(this, "addSplitter")}
                 >
                   Novo
                 </Button>

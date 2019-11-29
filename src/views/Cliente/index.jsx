@@ -133,7 +133,7 @@ class Index extends React.Component {
         }
       })
       .then(res => {
-        this.state.clientes = res.data;
+        this.setState({ clientes: res.data });
       })
       .catch(err => {
         console.log(err);

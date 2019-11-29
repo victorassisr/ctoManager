@@ -140,12 +140,12 @@ const dashboardRoutes = [
     component: editUser,
     layout: "/admin"
   },
-  {
+  /*{
     path: "/location",
     name: "Localizações",
     component: Location,
     layout: "/admin"
-  },
+  },*/
   {
   path: "/bairros",
   component: Bairro,

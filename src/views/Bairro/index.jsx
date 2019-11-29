@@ -94,7 +94,7 @@ class Index extends React.Component {
       })
       .then(res => {
         this.setRedirect('home');    
-        this.state.bairros = res.data;    
+        //this.state.bairros = res.data;    
       })
       .catch(err => {
         console.log(err.response);
